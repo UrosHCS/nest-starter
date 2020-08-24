@@ -1,0 +1,13 @@
+{
+    "search.exclude": {
+        "**/node_modules": false,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "dist": true,
+    },
+    "[typescript]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+}

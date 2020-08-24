@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  nest-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-app
+    user: "node"
+    depends_on:
+      - nest-mysql
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      NODE_HOST: 0.0.0.0
+      NODE_PORT: 3000
+    ports:
+      - "3000:3000"
+      # - "8080:8080" # web sockets port
+      - "9229:9229" # port for main app debugging
+      - "9230:9230" # another port for debugging scripts or anything that is not the main app
+    networks:
+      - nest_network
+    command: npm run start:debug-remote
+
+  nest-mysql:
+    image: mysql/mysql-server:5.7
+    container_name: nest-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: nest
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: nest
+    # ports:
+    #   - "33060:3306"
+    expose:
+      - "3306"
+    volumes:
+      - nest-mysql:/var/lib/mysql
+    networks:
+      - nest_network
+
+networks:
+  nest_network:
+    driver: bridge
+
+volumes:
+  nest-mysql:
+    driver: local
