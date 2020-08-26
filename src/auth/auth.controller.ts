@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Post, Req } from '@nestjs/common'
 import { User } from 'src/database/entities/user.entity'
 import { Transformer } from 'src/shared/response/transformer'
-import { UserTransformer } from 'src/users/resources/user.transformer'
+import { UserTransformer } from 'src/users/transformers/user.transformer'
 import { Auth } from './auth.decorator'
 import { AuthService } from './auth.service'
 import { LoginDto } from './dto/login.dto'
