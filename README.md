@@ -25,6 +25,8 @@ Clone this project, then run
 
 `docker-compose run nest-app npm install`
 
+Copy `.env.example` to `.env`, generate a unique string that will be used for JWT encoding and decoding and set it as the `JWT_SECRET` variable.
+
 Start the app in watch and debug mode with
 
 `docker-compose up`
