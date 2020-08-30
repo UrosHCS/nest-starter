@@ -1,10 +1,10 @@
 // TODO: make a cool seeding package instead of this
 'use strict'
 
-const { Role, User } = require('../dist/database/entities/user.entity')
+const { Role, User } = require('../dist/src/database/entities/user.entity')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
-const { factory } = require('../dist/database/factories/factory')
-const { Post } = require('../dist/database/entities/post.entity')
+const { factory } = require('../dist/src/database/factories/factory')
+const { Post } = require('../dist/src/database/entities/post.entity')
 
 require('./cli-set-up').then(async () => {
   

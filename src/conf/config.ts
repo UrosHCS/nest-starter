@@ -23,12 +23,12 @@ export default () => {
       logging: Boolean(process.env.DB_LOGGING),
 
       entities: [
-        process.env.NODE_ENV === 'test' || process.env.RUNTIME_LANGUAGE === 'ts'
-          ? // We run tests with ts-node so we use the entities in the src
+        process.env.RUNTIME_LANGUAGE === 'ts'
+          ? // Use ts files in src
             'src/database/entities/*.ts'
           : // Build files are in the dist directory so we need to point there
             // to find the entities when running the app.
-            'dist/database/entities/*.js',
+            'dist/src/database/entities/*.js',
       ],
     },
   }

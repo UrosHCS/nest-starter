@@ -8,7 +8,7 @@ if (!fs.existsSync('./dist')) {
 
 const { NestFactory } = require('@nestjs/core')
 const { FastifyAdapter } = require('@nestjs/platform-fastify')
-const { AppModule } = require('../dist/app.module')
+const { AppModule } = require('../dist/src/app.module')
 
 // We are reading this folder just for entity names. Since work dir
 // the root dir, this path is fine.
@@ -36,22 +36,22 @@ module.exports = NestFactory.create(AppModule, new FastifyAdapter())
       const entityClassName = entityInstanceName[0].toUpperCase() + entityInstanceName.substring(1)
       const repoName = `${entityClassName}Repository`
 
-      let entityModule = require(`../dist/database/entities/${name}.entity`)
+      let entityModule = require(`../dist/src/database/entities/${name}.entity`)
 
       registerGlobal(entityClassName, entityModule[entityClassName], 'entity class')
 
       // Here we will ignore error if a repo doesn't exist
       try {
-        let repo = require(`../dist/database/repositories/${name}.repository`)
+        let repo = require(`../dist/src/database/repositories/${name}.repository`)
         registerGlobal(`${entityInstanceName}Repo`, app.get(repo[repoName]), 'repository instance')
       } catch (e) {
         // Do nothing
       }
     }
 
-    require('../dist/database/factories/definitions')
+    require('../dist/src/database/factories/definitions')
 
-    const factory = require('../dist/database/factories/factory').factory
+    const factory = require('../dist/src/database/factories/factory').factory
 
     registerGlobal('factory', factory, 'function for making entities')
 

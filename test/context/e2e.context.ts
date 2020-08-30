@@ -11,7 +11,7 @@ export class E2EContext extends FastifyContext {
   constructor() {
     super()
     // This is how we register all defined factories
-    import('src/database/factories/definitions')
+    import('../../src/database/factories/definitions')
   }
 
   protected moduleMetadata(): ModuleMetadata {
