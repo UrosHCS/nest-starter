@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { safeUserFields, User } from 'src/database/entities/user.entity'
+import { User } from 'src/database/entities/user.entity'
 import { Paginator } from 'src/database/paginator'
 import { UserRepository } from 'src/database/repositories/user.repository'
 import { UsersFilter } from './users.dto'
@@ -13,7 +13,7 @@ export class UsersService {
     const direction = filter.direction ? filter.direction.toUpperCase() : 'ASC'
 
     return this.repo.paginate({
-      select: safeUserFields,
+      // select: safeUserFields,
       limit: filter.limit,
       page: filter.page,
       order: {

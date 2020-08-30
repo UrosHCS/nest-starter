@@ -44,12 +44,12 @@
             ],
         },
         {
-            "name": "Debug Jest Tests",
+            "name": "Debug Tests",
             "type": "node",
             "request": "launch",
             "runtimeArgs": [
                 "--inspect-brk",
-                "${workspaceRoot}/node_modules/.bin/jest",
+                "${workspaceRoot}/node_modules/.bin/mocha",
                 "--runInBand"
             ],
             "console": "integratedTerminal",

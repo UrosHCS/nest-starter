@@ -4,13 +4,16 @@ import { E2EContext } from '../context/e2e.context'
 export let ctx: E2EContext
 
 /**
- * Just await this method in the beforeEach and grab the ctx reference
+ * Use this in beforeEach or before global functions
  */
-export const before = async (): Promise<void> => {
+export const setUp = async (): Promise<void> => {
   ctx = new E2EContext()
-  await ctx.before()
+  await ctx.setUp()
 }
 
-export const after = async (): Promise<void> => {
-  await ctx.after()
+/**
+ * Use this in afterEach or after global functions
+ */
+export const tearDown = async (): Promise<void> => {
+  await ctx.tearDown()
 }

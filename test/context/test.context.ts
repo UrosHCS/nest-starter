@@ -17,14 +17,14 @@ export abstract class TestContext {
    * Create the nest app. You must await this method
    * in order for this class to work properly.
    */
-  async before() {
+  async setUp() {
     this.app = await this.createApp()
   }
 
   /**
-   * Helper to pass to afterEach in jest tests.
+   * Helper to pass to afterEach in tests.
    */
-  async after(): Promise<void> {
+  async tearDown(): Promise<void> {
     await this.app.close()
   }
 }

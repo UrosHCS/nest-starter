@@ -1,14 +1,15 @@
+import { expect } from 'chai'
 import { User } from 'src/database/entities/user.entity'
-import { after, before, ctx } from '../ctx'
+import { ctx, setUp, tearDown } from '../ctx'
 
 describe('users index', () => {
   let users: User[]
 
   // Since this whole test is just GET requests there is no persistance, no mutations.
-  // So we make the tests run faster by using beforeAll instead of beforeEach. Same
-  // for afterAll. This could be less safe then beforeEach, I'm not sure.
-  beforeAll(async () => {
-    await before()
+  // So we make the tests run faster by using before instead of beforeEach. Same
+  // for after. This could be less safe then beforeEach, I'm not sure.
+  before(async () => {
+    await setUp()
     users = await ctx.factory(User).createMany(3)
   })
 
@@ -18,7 +19,7 @@ describe('users index', () => {
       .query({ page: 1, limit: 3 })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data.length).toEqual(users.length)
+        expect(res.body.data.length).to.equal(users.length)
       })
   })
 
@@ -28,7 +29,7 @@ describe('users index', () => {
       .query({ page: 2, limit: 2 })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data.length).toEqual(1)
+        expect(res.body.data.length).to.equal(1)
       })
   })
 
@@ -38,8 +39,8 @@ describe('users index', () => {
       .query({ limit: 3 })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data.length).toEqual(users.length)
-        expect(res.body.pagination.page).toEqual(1)
+        expect(res.body.data.length).to.equal(users.length)
+        expect(res.body.pagination.page).to.equal(1)
       })
   })
 
@@ -49,9 +50,9 @@ describe('users index', () => {
       .query({ page: 1 })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data.length).toEqual(users.length)
-        expect(res.body).toHaveProperty('pagination.limit')
-        expect(res.body.pagination.limit).toEqual(10)
+        expect(res.body.data.length).to.equal(users.length)
+        expect(res.body).to.have.nested.property('pagination.limit')
+        expect(res.body.pagination.limit).to.equal(10)
       })
   })
 
@@ -61,8 +62,8 @@ describe('users index', () => {
       .query({ page: 0, limit: 1 })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toHaveProperty('message.0.constraints.min')
-        expect(res.body.message[0].constraints.min).toEqual('page must not be less than 1')
+        expect(res.body).to.have.nested.property('message[0].constraints.min')
+        expect(res.body.message[0].constraints.min).to.equal('page must not be less than 1')
       })
   })
 
@@ -72,8 +73,8 @@ describe('users index', () => {
       .query({ limit: 0, page: 1 })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toHaveProperty('message.0.constraints.min')
-        expect(res.body.message[0].constraints.min).toEqual('limit must not be less than 1')
+        expect(res.body).to.have.nested.property('message[0].constraints.min')
+        expect(res.body.message[0].constraints.min).to.equal('limit must not be less than 1')
       })
   })
 
@@ -83,8 +84,8 @@ describe('users index', () => {
       .query({ page: 1.1, limit: 1 })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toHaveProperty('message.0.constraints.isInt')
-        expect(res.body.message[0].constraints.isInt).toEqual('page must be an integer number')
+        expect(res.body).to.have.nested.property('message[0].constraints.isInt')
+        expect(res.body.message[0].constraints.isInt).to.equal('page must be an integer number')
       })
   })
 
@@ -94,8 +95,8 @@ describe('users index', () => {
       .query({ limit: 1.1, page: 1 })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toHaveProperty('message.0.constraints.isInt')
-        expect(res.body.message[0].constraints.isInt).toEqual('limit must be an integer number')
+        expect(res.body).to.have.nested.property('message[0].constraints.isInt')
+        expect(res.body.message[0].constraints.isInt).to.equal('limit must be an integer number')
       })
   })
 
@@ -105,12 +106,12 @@ describe('users index', () => {
       .query({ limit: 1, page: 1, direction: 'invalid direction' })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toHaveProperty('message.0.constraints.isInCaseInsensitive')
-        expect(res.body.message[0].constraints.isInCaseInsensitive).toEqual(
+        expect(res.body).to.have.nested.property('message[0].constraints.isInCaseInsensitive')
+        expect(res.body.message[0].constraints.isInCaseInsensitive).to.equal(
           `The property "direction" must be one of: asc, desc, ASC, DESC. Value "invalid direction" given.`,
         )
       })
   })
 
-  afterAll(after)
+  after(tearDown)
 })

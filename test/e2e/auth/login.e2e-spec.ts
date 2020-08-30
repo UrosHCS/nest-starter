@@ -1,7 +1,8 @@
-import { after, before, ctx } from '../ctx'
+import { expect } from 'chai'
+import { ctx, setUp, tearDown } from '../ctx'
 
 describe('LogIn', () => {
-  beforeEach(before)
+  beforeEach(setUp)
 
   it('logs in if credentials are valid', async () => {
     const user = await ctx.createUser()
@@ -11,13 +12,13 @@ describe('LogIn', () => {
       .send({ email: user.email, password: 'password' })
       .expect(200)
       .expect((res) => {
-        expect(res.body.data).toHaveProperty('token')
-        expect(res.body.data.token).toMatch(
+        expect(res.body.data).to.have.property('token')
+        expect(res.body.data.token).to.match(
           /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
         )
-        expect(res.body.data).toHaveProperty('user.email', user.email)
-        expect(res.body.data).toHaveProperty('user.role', user.role)
-        expect(res.body.data).not.toHaveProperty('user.password')
+        expect(res.body.data).to.have.nested.property('user.email', user.email)
+        expect(res.body.data).to.have.nested.property('user.role', user.role)
+        expect(res.body.data).not.to.have.nested.property('user.password')
       })
   })
 
@@ -32,7 +33,7 @@ describe('LogIn', () => {
       })
       .expect(401)
       .expect((res) => {
-        expect(res.body).toEqual({
+        expect(res.body).to.deep.equal({
           statusCode: 401,
           error: 'Unauthorized',
           message: 'Wrong password',
@@ -40,5 +41,5 @@ describe('LogIn', () => {
       })
   })
 
-  afterEach(after)
+  afterEach(tearDown)
 })

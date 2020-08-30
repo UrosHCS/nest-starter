@@ -1,9 +1,10 @@
 import { compare } from 'bcrypt'
+import { expect } from 'chai'
 import { Role, User } from 'src/database/entities/user.entity'
-import { after, before, ctx } from '../ctx'
+import { ctx, setUp, tearDown } from '../ctx'
 
 describe('Register', () => {
-  beforeEach(before)
+  beforeEach(setUp)
 
   it('creates and logs in the user if fields are valid', async () => {
     const email = 'some@example.com'
@@ -15,13 +16,13 @@ describe('Register', () => {
       })
       .expect(201)
       .expect((res) => {
-        expect(res.body.data).toHaveProperty('token')
-        expect(res.body.data.token).toMatch(
+        expect(res.body.data).to.have.property('token')
+        expect(res.body.data.token).to.match(
           /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
         )
-        expect(res.body.data).toHaveProperty('user.email', email)
-        expect(res.body.data).toHaveProperty('user.role', Role.client)
-        expect(res.body.data).not.toHaveProperty('user.password')
+        expect(res.body.data).to.have.nested.property('user.email', email)
+        expect(res.body.data).to.have.nested.property('user.role', Role.client)
+        expect(res.body.data).not.to.have.nested.property('user.password')
       })
   })
 
@@ -37,11 +38,11 @@ describe('Register', () => {
       .expect(201)
       .then(async () => {
         const user = await ctx.repo(User).findOne({ email })
-        expect(user).toBeTruthy()
-        expect((user as User).password).not.toEqual(password)
+        expect(user).to.be.an('object')
+        expect((user as User).password).not.to.equal(password)
 
         const passwordsMatch = await compare('somePassword', (user as User).password)
-        expect(passwordsMatch).toStrictEqual(true)
+        expect(passwordsMatch).to.be.true
       })
   })
 
@@ -56,7 +57,7 @@ describe('Register', () => {
       })
       .expect(201)
       .expect((res) => {
-        expect(res.body.data).toHaveProperty('user.email', trimmedEmail)
+        expect(res.body.data).to.have.nested.property('user.email', trimmedEmail)
       })
   })
 
@@ -73,10 +74,10 @@ describe('Register', () => {
       .expect(201)
       .then(async () => {
         const user = await ctx.repo(User).findOne({ email })
-        expect(user).toBeTruthy()
+        expect(user).to.be.an('object')
 
-        expect(await compare(trimmedPassword, (user as User).password)).toStrictEqual(false)
-        expect(await compare(password, (user as User).password)).toStrictEqual(true)
+        expect(await compare(trimmedPassword, (user as User).password)).to.be.false
+        expect(await compare(password, (user as User).password)).to.be.true
       })
   })
 
@@ -91,7 +92,7 @@ describe('Register', () => {
       })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toEqual({
+        expect(res.body).to.deep.equal({
           statusCode: 400,
           error: 'Bad Request',
           message: `Password ${password} can't be used because it is too common.`,
@@ -109,7 +110,7 @@ describe('Register', () => {
       })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toEqual({
+        expect(res.body).to.deep.equal({
           statusCode: 400,
           error: 'Bad Request',
           message: 'Password cannot be same as email.',
@@ -128,7 +129,7 @@ describe('Register', () => {
       })
       .expect(400)
       .expect((res) => {
-        expect(res.body).toEqual({
+        expect(res.body).to.deep.equal({
           statusCode: 400,
           error: 'Bad Request',
           message: [
@@ -144,5 +145,5 @@ describe('Register', () => {
       })
   })
 
-  afterEach(after)
+  afterEach(tearDown)
 })
