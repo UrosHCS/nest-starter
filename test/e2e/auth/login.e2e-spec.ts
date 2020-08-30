@@ -5,6 +5,7 @@ describe('LogIn', () => {
 
   it('logs in if credentials are valid', async () => {
     const user = await ctx.createUser()
+
     return ctx.request
       .post('/login')
       .send({ email: user.email, password: 'password' })

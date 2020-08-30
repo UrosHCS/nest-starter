@@ -16,7 +16,7 @@ type Attribute<E, P extends keyof E> = E[P] extends NestedFactoryNotAvailable
 // In typeorm column can be represented by some of the following types.
 // Also, enums can be used, but we cannot add object type because
 // relations are also of object type.
-type ColumnAttribute = string | number | boolean | bigint | Date
+type ColumnAttribute = string | number | boolean | bigint | Date | null | undefined
 
 // Factories can be nested only for @ManyToOne relations and also only one side of a @OneToOne relation.
 // We can filter other relations by not allowing factories for columns of type Array. The one side of
