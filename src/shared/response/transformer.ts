@@ -1,6 +1,6 @@
 type ResponseBody = {
-  data: any
-  meta?: any
+  data?: any
+  [key: string]: any
 }
 
 interface TransformerInterface {
@@ -9,10 +9,6 @@ interface TransformerInterface {
 }
 
 type TransformerConstructor = new (resource: any) => TransformerInterface
-
-function make<E>(constructor: TransformerConstructor, resource: E) {
-  return new constructor(resource).toResponse()
-}
 
 /**
  * Use as a base class to make response objects
@@ -31,17 +27,9 @@ export class Transformer implements TransformerInterface {
   }
 
   toResponse(): ResponseBody {
-    const response: ResponseBody = {
-      data: this.transform(),
+    return {
+      data: this.transform()
     }
-
-    const meta = this.meta()
-
-    if (meta) {
-      response.meta = meta
-    }
-
-    return response
   }
 
   transform(): any {
@@ -63,10 +51,6 @@ export class Transformer implements TransformerInterface {
   }
 
   protected collectFrom(): TransformerConstructor | undefined {
-    return undefined
-  }
-
-  protected meta(): any {
     return undefined
   }
 }

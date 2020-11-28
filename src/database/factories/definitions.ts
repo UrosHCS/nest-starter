@@ -1,2 +1,2 @@
-import './post.factory'
-import './user.factory'
+import './user.factory';
+

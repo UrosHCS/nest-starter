@@ -4,7 +4,6 @@
 const { Role, User } = require('../dist/database/entities/user.entity')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
 const { factory } = require('../dist/database/factories/factory')
-const { Post } = require('../dist/database/entities/post.entity')
 
 require('./cli-set-up').then(async () => {
   
@@ -13,7 +12,6 @@ require('./cli-set-up').then(async () => {
   })
 
   const userFactory = factory(User)
-  const postFactory = factory(Post)
 
   let user = await userFactory.create({
     name: 'admin',
@@ -21,23 +19,17 @@ require('./cli-set-up').then(async () => {
     role: Role.admin,
   })
 
-  await postFactory.createMany(3, {user})
-
   user = await userFactory.create({
     name: 'client',
     email: 'client@example.com',
     role: Role.client,
   })
 
-  await postFactory.createMany(3, {user})
-
   user = await userFactory.create({
     name: 'john',
     email: 'john@example.com',
     role: Role.client,
   })
-
-  await postFactory.createMany(3, {user})
 
 }).then(() => {
 

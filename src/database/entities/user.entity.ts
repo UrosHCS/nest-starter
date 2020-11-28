@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm'
-import { Post } from './post.entity'
 
 export enum Role {
   admin = 'admin',
@@ -55,9 +53,6 @@ export class User {
     default: Role.client,
   })
   role: Role
-
-  @OneToMany((type) => Post, (post) => post.user)
-  posts: Post[]
 
   @CreateDateColumn()
   createdAt: Date
