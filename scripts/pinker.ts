@@ -1,9 +1,7 @@
-process.env.RUNTIME_LANGUAGE = 'ts'
-
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import * as fs from 'fs'
-import { AppModule } from '../src/app.module'
+import { AppModule } from '../src/app.module.js'
 
 async function pinker(app: NestFastifyApplication) {
   // Keep track so we can print them for the user

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { TransformRequest } from './transform.request'
+import { TransformRequest } from './transform.request.js'
 
 @Injectable()
 export class TrimStrings extends TransformRequest {

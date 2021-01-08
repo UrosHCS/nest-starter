@@ -1,11 +1,11 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
-import { AppModule } from 'src/app.module'
-import { AuthService } from 'src/auth/auth.service'
-import { User } from 'src/database/entities/user.entity'
-import { EntityConstructor, factory } from 'src/database/factories/factory'
 import * as request from 'supertest'
 import { Connection, ObjectType, Repository } from 'typeorm'
-import { FastifyContext } from './fastify.context'
+import { AppModule } from '../../src/app.module.js'
+import { AuthService } from '../../src/auth/auth.service.js'
+import { User } from '../../src/database/entities/user.entity.js'
+import { EntityConstructor, factory } from '../../src/database/factories/factory.js'
+import { FastifyContext } from './fastify.context.js'
 
 export class E2EContext extends FastifyContext {
   constructor() {

@@ -1,5 +1,5 @@
 // This is a test for home page but it is actually a blueprint for new tests.
-import { after, before, ctx } from '../ctx'
+import { after, before, ctx } from '../ctx.js'
 
 describe('a test', () => {
   beforeEach(before)

@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer'
 import { IsIn, IsInt, IsOptional, Min, Validate } from 'class-validator'
-import { safeUserFields, User } from 'src/database/entities/user.entity'
-import { IsInCaseInsensitive } from 'src/shared/validators/is-in-case-insensitive'
+import { safeUserFields, User } from '../database/entities/user.entity.js'
+import { IsInCaseInsensitive } from '../shared/validators/is-in-case-insensitive.js'
 
 export class UsersFilter {
   @IsOptional()

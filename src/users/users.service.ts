@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { safeUserFields, User } from 'src/database/entities/user.entity'
-import { Paginator } from 'src/database/paginator'
-import { UserRepository } from 'src/database/repositories/user.repository'
-import { UsersFilter } from './users.dto'
+import { safeUserFields, User } from '../database/entities/user.entity.js'
+import { Paginator } from '../database/paginator.js'
+import { UserRepository } from '../database/repositories/user.repository.js'
+import { UsersFilter } from './users.dto.js'
 
 @Injectable()
 export class UsersService {

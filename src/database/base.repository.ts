@@ -1,5 +1,5 @@
 import { FindManyOptions, Repository } from 'typeorm'
-import { Paginator } from './paginator'
+import { Paginator } from './paginator.js'
 
 export interface PaginateOptions<E> extends FindManyOptions<E> {
   page?: number

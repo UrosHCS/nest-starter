@@ -1,6 +1,6 @@
 import { IsEmail, Length, Validate } from 'class-validator'
-import { User } from 'src/database/entities/user.entity'
-import { Exists } from 'src/shared/validators/exists'
+import { User } from '../../database/entities/user.entity.js'
+import { Exists } from '../../shared/validators/exists.js'
 
 export class RegisterDto {
   @IsEmail()

@@ -1,6 +1,6 @@
 import { EntityRepository, Not } from 'typeorm'
-import { BaseRepository } from '../base.repository'
-import { Role, User } from '../entities/user.entity'
+import { BaseRepository } from '../base.repository.js'
+import { Role, User } from '../entities/user.entity.js'
 
 @EntityRepository(User)
 export class UserRepository extends BaseRepository<User> {

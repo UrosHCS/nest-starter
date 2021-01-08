@@ -11,7 +11,7 @@ export abstract class TestContext {
   /**
    * This method should create and initialize a nest app instance.
    */
-  abstract async createApp(): Promise<INestApplication>
+  abstract createApp(): Promise<INestApplication>
 
   /**
    * Create the nest app. You must await this method

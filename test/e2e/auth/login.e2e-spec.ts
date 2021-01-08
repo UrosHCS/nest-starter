@@ -1,4 +1,4 @@
-import { after, before, ctx } from '../ctx'
+import { after, before, ctx } from '../ctx.js'
 
 describe('LogIn', () => {
   beforeEach(before)

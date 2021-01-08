@@ -1,5 +1,5 @@
-import { User } from 'src/database/entities/user.entity'
-import { after, before, ctx } from '../ctx'
+import { User } from '../../../src/database/entities/user.entity.js'
+import { after, before, ctx } from '../ctx.js'
 
 describe('users get', () => {
   let user: User

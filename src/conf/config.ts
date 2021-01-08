@@ -1,3 +1,5 @@
+import { User } from "../database/entities/user.entity.js"
+
 export default () => {
   const config = {
     /**
@@ -23,12 +25,9 @@ export default () => {
       logging: Boolean(process.env.DB_LOGGING),
 
       entities: [
-        process.env.NODE_ENV === 'test' || process.env.RUNTIME_LANGUAGE === 'ts'
-          ? // We run tests with ts-node so we use the entities in the src
-            'src/database/entities/*.ts'
-          : // Build files are in the dist directory so we need to point there
-            // to find the entities when running the app.
-            'dist/database/entities/*.js',
+        // Instead of specifying a regex to find all entities, add them manually.
+        // This avoids an error with mixing require() and ESM.
+        User,
       ],
     },
   }

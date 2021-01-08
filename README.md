@@ -65,4 +65,4 @@ The `tspinker` is not working correctly because TypeScript does not see the regi
 
 ## Env variables
 
-There are two important environment variables that impact the app setup: `NODE_ENV` and `RUNTIME_LANGUAGE`. Running the app with `node src/main` will have both of those variables as undefined which is fine. Running tests will set NODE_ENV to `"test"`. This will do 2 things. It will use `.env.test` as the env file and it will use `'src/database/entities/*.ts'` as the path to entity files. Running the ts version of pinker will se RUNTIME_LANGUAGE to `'ts'`. This will use `'src/database/entities/*.ts'` as the path to entity files but it will use the default `.env` file.
+There is one important environment variable that impacts the app setup - `NODE_ENV`. Default value is `"develop"`. Running tests will set NODE_ENV to `"test"`. The only difference at the moment is that test env will use `.env.test` instead of `.env`.

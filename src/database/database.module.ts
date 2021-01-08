@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserRepository } from './repositories/user.repository'
+import { UserRepository } from './repositories/user.repository.js'
 
 // Make the database module global so we don't have to import it or
 // typeorm in any other module. If you want you can remove the global
@@ -13,7 +13,6 @@ import { UserRepository } from './repositories/user.repository'
   // new repository here so you can inject it where it's needed.
   imports: [
     TypeOrmModule.forFeature([
-      // List repos here
       UserRepository,
     ]),
   ],

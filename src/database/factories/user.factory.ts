@@ -1,5 +1,5 @@
 import { hash } from 'bcrypt'
-import { Role, User } from 'src/database/entities/user.entity'
+import { Role, User } from '../entities/user.entity.js'
 import { define } from './factory'
 
 define(User, async (faker, attributes) => {

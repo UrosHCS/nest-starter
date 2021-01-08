@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common'
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core'
-import { TrimStrings } from 'src/shared/interceptors/trim.strings'
-import { EntityNotFoundFilter } from './filters/entity-not-found.filter'
-import { Exists } from './validators/exists'
-// import { IsInCaseInsensitive } from './validators/is.in.case.insensitive'
+import { EntityNotFoundFilter } from './filters/entity-not-found.filter.js'
+import { TrimStrings } from './interceptors/trim.strings.js'
+import { Exists } from './validators/exists.js'
+// import { IsInCaseInsensitive } from './validators/is.in.case.insensitive.js'
 
 @Global()
 @Module({

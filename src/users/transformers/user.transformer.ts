@@ -1,5 +1,5 @@
-import { safeUserFields } from 'src/database/entities/user.entity'
-import { Transformer } from 'src/shared/response/transformer'
+import { safeUserFields } from "../../database/entities/user.entity.js"
+import { Transformer } from "../../shared/response/transformer.js"
 
 export class UserTransformer extends Transformer {
   transform() {

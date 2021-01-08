@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt'
-import { Role, User } from 'src/database/entities/user.entity'
-import { after, before, ctx } from '../ctx'
+import { Role, User } from '../../src/database/entities/user.entity.js'
+import { after, before, ctx } from '../ctx.js'
 
 describe('Register', () => {
   beforeEach(before)
