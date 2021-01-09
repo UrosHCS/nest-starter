@@ -48,7 +48,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
-    "sqlite3": "^5.0.1",
+    "sqlite3": "^5.0.0",
     "typeorm": "^0.2.29",
     "typeorm-seeding": "^1.6.1",
     "ws": "^7.4.2"

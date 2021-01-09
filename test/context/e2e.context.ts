@@ -1,5 +1,5 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
-import * as request from 'supertest'
+import request from 'supertest'
 import { Connection, ObjectType, Repository } from 'typeorm'
 import { AppModule } from '../../src/app.module.js'
 import { AuthService } from '../../src/auth/auth.service.js'
@@ -11,7 +11,7 @@ export class E2EContext extends FastifyContext {
   constructor() {
     super()
     // This is how we register all defined factories
-    import('src/database/factories/definitions')
+    import('../../src/database/factories/definitions.js')
   }
 
   protected moduleMetadata(): ModuleMetadata {
