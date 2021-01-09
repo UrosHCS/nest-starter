@@ -3,7 +3,7 @@ import { AppModule } from 'src/app.module'
 import { AuthService } from 'src/auth/auth.service'
 import { User } from 'src/database/entities/user.entity'
 import { EntityConstructor, factory } from 'src/database/factories/factory'
-import request from 'supertest'
+import * as request from 'supertest'
 import { Connection, ObjectType, Repository } from 'typeorm'
 import { FastifyContext } from './fastify.context'
 
