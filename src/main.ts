@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
-import { appSetup } from './app-setup.js'
-import { AppModule } from './app.module.js'
+import { appSetup } from './app-setup'
+import { AppModule } from './app.module'
 
 // Enables passing the port and host thu env variables
 const port = Number(process.env.NODE_PORT) || 3000

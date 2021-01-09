@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { AppController } from './app.controller.js'
-import { AuthModule } from './auth/auth.module.js'
-import { ConfModule } from './conf/conf.module.js'
-import { ConfService } from './conf/conf.service.js'
-import { DatabaseModule } from './database/database.module.js'
-import { SharedModule } from './shared/shared.module.js'
-import { UsersModule } from './users/users.module.js'
+import { AppController } from './app.controller'
+import { AuthModule } from './auth/auth.module'
+import { ConfModule } from './conf/conf.module'
+import { ConfService } from './conf/conf.service'
+import { DatabaseModule } from './database/database.module'
+import { SharedModule } from './shared/shared.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [

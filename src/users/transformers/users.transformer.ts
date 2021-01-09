@@ -1,5 +1,5 @@
-import { Transformer } from '../../shared/response/transformer.js'
-import { UserTransformer } from './user.transformer.js'
+import { Transformer } from 'src/shared/response/transformer'
+import { UserTransformer } from './user.transformer'
 
 export class UsersTransformer extends Transformer {
   protected collectFrom() {

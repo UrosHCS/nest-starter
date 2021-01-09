@@ -13,5 +13,4 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": false,
     },
-    "typescript.preferences.importModuleSpecifierEnding": "js",
 }

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import * as fs from 'fs'
-import { AppModule } from '../src/app.module.js'
+import { AppModule } from 'src/app.module'
 
 async function pinker(app: NestFastifyApplication) {
   // Keep track so we can print them for the user

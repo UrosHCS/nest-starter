@@ -2,8 +2,8 @@ import { INestApplication } from '@nestjs/common'
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { Test, TestingModule } from '@nestjs/testing'
-import { appSetup } from '../../src/app-setup.js'
-import { TestContext } from './test.context.js'
+import { appSetup } from 'src/app-setup'
+import { TestContext } from './test.context'
 
 export abstract class FastifyContext extends TestContext {
   /**

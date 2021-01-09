@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:debug-remote": "nest start --debug 0.0.0.0:9229 --watch",
+    "start:debug-remote": "nest start --debug 0.0.0.0:9229 --watch -- --experimental-modules --es-module-specifier-resolution=node",
     "start:prod": "node dist/main",
     "test": "jest",
     "test:watch": "jest --watch",

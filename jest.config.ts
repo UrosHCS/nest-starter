@@ -28,17 +28,17 @@ import type { Config } from '@jest/types';
 
 // Sync object
 const config: Config.InitialOptions = {
-  preset: 'ts-jest',
+  // preset: 'ts-jest',
   testEnvironment: 'node',
   verbose: true,
   testMatch: ['<rootDir>/test/**/*spec.ts'],
   testPathIgnorePatterns: [],
-  moduleFileExtensions: ['ts', 'js', 'json'],
-  // transform: {
-  //   '^.+\\.(t|j)s$': 'ts-jest',
-  // },
+  moduleFileExtensions: ['ts', 'js'],
+  transform: {
+    '^.+\\.(t|j)s$': 'ts-jest',
+  },
   moduleNameMapper: {
-    '^(.*).js$': '$1',
+    "^src/(.*)$": "<rootDir>/src/$1",
   },
 };
 export default config;

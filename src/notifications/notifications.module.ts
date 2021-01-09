@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { NotificationsGateway } from './notifications.gateway.js'
+import { NotificationsGateway } from './notifications.gateway'
 
 @Module({
   providers: [NotificationsGateway],

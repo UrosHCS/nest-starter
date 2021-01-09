@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
 import { FastifyReply, RawServerDefault } from 'fastify'
-import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError.js'
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError'
 
 @Catch(EntityNotFoundError)
 export class EntityNotFoundFilter implements ExceptionFilter {

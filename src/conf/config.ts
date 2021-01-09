@@ -1,4 +1,4 @@
-import { User } from "../database/entities/user.entity.js"
+import { User } from "src/database/entities/user.entity"
 
 export default () => {
   const config = {
