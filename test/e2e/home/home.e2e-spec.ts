@@ -5,7 +5,7 @@ describe('a test', () => {
   beforeEach(before)
 
   it('tests something', async () => {
-    return ctx.request.get('/').expect(200)
+    return ctx.request().get('/').expect(200)
   })
 
   afterEach(after)

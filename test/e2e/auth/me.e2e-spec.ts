@@ -1,16 +1,38 @@
+import { AuthService } from "src/auth/auth.service"
 import { after, before, ctx } from "../ctx"
 
 describe('Get logged in user', () => {
   beforeEach(before)
 
-  it('declines malformed JWT', async () => {
-    const { user, token } = await ctx.logIn()
+  let cases: [(token: string) => string][] = [
+    // concat 'bad' to signature part
+    [(token) => {
+      const [header, payload, signature] = token.split('.')
 
-    const parts = token.split('.')
+      return [header, payload, signature + 'bad'].join('.')
+    }],
+    // replace last character in signature by '3'
+    [(token) => {
+      const [header, payload, signature] = token.split('.')
 
-    const malformedToken = [parts[0] + 'bad', parts[1], parts[2]].join('.')
+      return [header, payload, signature.slice(0, -1) + '3'].join('.')
+    }],
+    // remove last character from signature
+    [(token) => {
+      const [header, payload, signature] = token.split('.')
 
-    return ctx.request
+      return [header + 'bad', payload, signature.slice(0, -1)].join('.')
+    }],
+  ]
+
+  it.each(cases)('declines malformed JWT', async (generateMalformedToken) => {
+    const user = await ctx.createUser()
+
+    const token = await ctx.app.get(AuthService).makeToken(user)
+
+    const malformedToken = generateMalformedToken(token)
+
+    return ctx.request()
       .get('/me')
       .set('Authorization', 'Bearer ' + malformedToken)
       .expect(401)
@@ -25,7 +47,7 @@ describe('Get logged in user', () => {
   it('returns logged in user', async () => {
     const { user, token } = await ctx.logIn()
 
-    return ctx.request
+    return ctx.request()
       .get('/me')
       .set('Authorization', 'Bearer ' + token)
       .expect(200)

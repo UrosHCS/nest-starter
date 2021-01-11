@@ -13,7 +13,7 @@ describe('users index', () => {
   })
 
   it('returns all users if limit is big enough', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ page: 1, limit: 3 })
       .expect(200)
@@ -23,7 +23,7 @@ describe('users index', () => {
   })
 
   it('works on page 2', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ page: 2, limit: 2 })
       .expect(200)
@@ -33,7 +33,7 @@ describe('users index', () => {
   })
 
   it('returns page 1 if page is not specified', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ limit: 3 })
       .expect(200)
@@ -44,7 +44,7 @@ describe('users index', () => {
   })
 
   it('returns limit 10 if limit is not specified', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ page: 1 })
       .expect(200)
@@ -56,7 +56,7 @@ describe('users index', () => {
   })
 
   it('returns 400 if page is less than one', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ page: 0, limit: 1 })
       .expect(400)
@@ -67,7 +67,7 @@ describe('users index', () => {
   })
 
   it('returns 400 if limit is less than one', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ limit: 0, page: 1 })
       .expect(400)
@@ -78,7 +78,7 @@ describe('users index', () => {
   })
 
   it('returns 400 if page not an int', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ page: 1.1, limit: 1 })
       .expect(400)
@@ -89,7 +89,7 @@ describe('users index', () => {
   })
 
   it('returns 400 if limit not an int', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ limit: 1.1, page: 1 })
       .expect(400)
@@ -100,7 +100,7 @@ describe('users index', () => {
   })
 
   it('returns 400 if direction is not valid', async () => {
-    return ctx.request
+    return ctx.request()
       .get('/users')
       .query({ limit: 1, page: 1, direction: 'invalid direction' })
       .expect(400)
