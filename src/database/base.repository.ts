@@ -1,7 +1,7 @@
-import { FindManyOptions, Repository } from 'typeorm'
-import { Paginator } from './paginator'
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { Paginator } from './paginator';
 
-export interface PaginateOptions<E> extends FindManyOptions<E> {
+export interface PaginateOptions<E> extends FindOneOptions<E> {
   page?: number
   limit?: number
 }
@@ -20,8 +20,8 @@ export abstract class BaseRepository<E> extends Repository<E> {
 
     page = page || 1
     limit = limit || 10
-    options.take = limit
-    options.skip = (page - 1) * limit
+    ;(options as FindManyOptions).take = limit
+    ;(options as FindManyOptions).skip = (page - 1) * limit
 
     const [entities, total] = await this.findAndCount(options)
 

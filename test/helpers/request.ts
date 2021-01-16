@@ -1,66 +1,46 @@
 import * as request from 'supertest'
 
+interface Headers {
+  [key: string]: string
+}
+
 export class Request {
-    private authToken: string
-    private server: any
+  private headers: Headers = {}
+  private server: any
 
-    setToken(authToken: string) {
-        this.authToken = authToken
+  setHeader(key: string, value: string) {
+    this.headers[key] = value
+  }
+
+  setServer(server: any) {
+    this.server = server
+  }
+
+  get(url: string) {
+    return this.req().get(url).set(this.headers)
+  }
+
+  post(url: string) {
+    return this.req().post(url).set(this.headers)
+  }
+
+  put(url: string) {
+    return this.req().put(url).set(this.headers)
+  }
+
+  delete(url: string) {
+    return this.req().delete(url).set(this.headers)
+  }
+
+  patch(url: string) {
+    return this.req().get(url).set(this.headers)
+  }
+
+  private req() {
+    if (!this.server) {
+      throw new Error('Server not set. Call setServer method and pass app.getHttpServer() to it.')
     }
 
-    setServer(server: any) {
-        this.server = server
-    }
-
-    get(url: string) {
-        const req = this.makeRequest().get(url)
-
-        this.authorizeOrNot(req)
-
-        return req
-    }
-
-    post(url: string) {
-        const req = this.makeRequest().post(url)
-
-        this.authorizeOrNot(req)
-
-        return req
-    }
-
-    put(url: string) {
-        const req = this.makeRequest().put(url)
-
-        this.authorizeOrNot(req)
-
-        return req
-    }
-
-    delete(url: string) {
-        const req = this.makeRequest().delete(url)
-
-        this.authorizeOrNot(req)
-
-        return req
-    }
-
-    patch(url: string) {
-        const req = this.makeRequest().get(url)
-
-        this.authorizeOrNot(req)
-
-        return req
-    }
-
-    private makeRequest() {
-        return request(this.server)
-    }
-
-    private authorizeOrNot(req: request.Test): void {
-        if (! this.authToken) {
-            return;
-        }
-
-        req.set('Authorization', 'Bearer: ' + this.authToken)
-    }
+    return request(this.server)
+  }
 }

@@ -1,28 +1,34 @@
-import { AuthService } from "src/auth/auth.service"
-import { after, before, ctx } from "../ctx"
+import { AuthService } from 'src/auth/auth.service'
+import { after, before, ctx } from '../ctx'
 
 describe('Get logged in user', () => {
   beforeEach(before)
 
   let cases: [(token: string) => string][] = [
     // concat 'bad' to signature part
-    [(token) => {
-      const [header, payload, signature] = token.split('.')
+    [
+      (token) => {
+        const [header, payload, signature] = token.split('.')
 
-      return [header, payload, signature + 'bad'].join('.')
-    }],
+        return [header, payload, signature + 'bad'].join('.')
+      },
+    ],
     // replace last character in signature by '3'
-    [(token) => {
-      const [header, payload, signature] = token.split('.')
+    [
+      (token) => {
+        const [header, payload, signature] = token.split('.')
 
-      return [header, payload, signature.slice(0, -1) + '3'].join('.')
-    }],
+        return [header, payload, signature.slice(0, -1) + '3'].join('.')
+      },
+    ],
     // remove last character from signature
-    [(token) => {
-      const [header, payload, signature] = token.split('.')
+    [
+      (token) => {
+        const [header, payload, signature] = token.split('.')
 
-      return [header + 'bad', payload, signature.slice(0, -1)].join('.')
-    }],
+        return [header + 'bad', payload, signature.slice(0, -1)].join('.')
+      },
+    ],
   ]
 
   it.each(cases)('declines malformed JWT', async (generateMalformedToken) => {
@@ -32,7 +38,8 @@ describe('Get logged in user', () => {
 
     const malformedToken = generateMalformedToken(token)
 
-    return ctx.request()
+    return ctx
+      .request()
       .get('/me')
       .set('Authorization', 'Bearer ' + malformedToken)
       .expect(401)
@@ -45,11 +52,11 @@ describe('Get logged in user', () => {
   })
 
   it('returns logged in user', async () => {
-    const { user, token } = await ctx.logIn()
+    const user = await ctx.logIn()
 
-    return ctx.request()
+    return ctx
+      .request()
       .get('/me')
-      .set('Authorization', 'Bearer ' + token)
       .expect(200)
       .expect((res) => {
         expect(res.body.data).toStrictEqual({

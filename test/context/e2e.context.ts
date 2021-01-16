@@ -49,9 +49,9 @@ export class E2EContext extends FastifyContext {
 
     const token = await this.app.get(AuthService).makeToken(user)
 
-    this.req.setToken(token)
+    this.req.setHeader('Authorization', 'Bearer ' + token)
 
-    return { user, token }
+    return user
   }
 
   request() {
