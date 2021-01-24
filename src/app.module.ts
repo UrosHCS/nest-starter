@@ -4,7 +4,6 @@ import { AppController } from './app.controller'
 import { AuthModule } from './auth/auth.module'
 import { ConfModule } from './conf/conf.module'
 import { ConfService } from './conf/conf.service'
-import { DatabaseModule } from './database/database.module'
 import { SharedModule } from './shared/shared.module'
 import { UsersModule } from './users/users.module'
 
@@ -12,7 +11,6 @@ import { UsersModule } from './users/users.module'
   imports: [
     AuthModule,
     ConfModule,
-    DatabaseModule,
     SharedModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfModule],

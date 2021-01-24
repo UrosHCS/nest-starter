@@ -20,7 +20,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async get(@Param('id') id: string) {
-    return UserTransformer.make(await this.service.findOneOrFail(id))
+  async get(@Param('id') id: number) {
+    return UserTransformer.make(await this.service.findOneOrFail({ id }))
   }
 }

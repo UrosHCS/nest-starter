@@ -1,21 +1,26 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcrypt'
-import { User } from 'src/database/entities/user.entity'
-import { UserRepository } from 'src/database/repositories/user.repository'
+import { User } from 'src/users/user.entity'
+import { UsersService } from 'src/users/users.service'
+import { PasswordRepository } from './password.repository'
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly users: UserRepository, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly passwords: PasswordRepository,
+  ) {}
 
   async findAndValidateUser(email: string, password: string): Promise<User> {
-    const user = await this.users.findOne({ email })
+    const user = await this.usersService.findOne({ email })
 
     if (!user) {
       throw new UnauthorizedException('We could not find this email address.')
     }
 
-    const passwordsMatch = await compare(password, user.password)
+    const passwordsMatch = await this.comparePasswords(password, user)
 
     if (!passwordsMatch) {
       throw new UnauthorizedException('Wrong password')
@@ -29,13 +34,17 @@ export class AuthService {
       throw new BadRequestException('Password cannot be same as email.')
     }
 
-    if (this.forbiddenPasswords().includes(password)) {
+    if (this.validatePassword(password)) {
       throw new BadRequestException(`Password ${password} can't be used because it is too common.`)
     }
 
-    const user = await this.users.save({
+    const user = await this.usersService.create({
       email,
-      password: await this.hashPassword(password),
+    })
+
+    await this.passwords.save({
+      userId: user.id,
+      value: await this.hashPassword(password),
     })
 
     return user
@@ -48,46 +57,50 @@ export class AuthService {
     return token
   }
 
-  async hashPassword(password: string) {
+  private async comparePasswords(password: string, user: User) {
+    const userPassword = await this.passwords.findOneOrFail({
+      userId: user.id,
+    })
+
+    return await compare(password, userPassword.value)
+  }
+
+  private async hashPassword(password: string) {
     // Hashing rounds is hard coded to 10 for now. I don't think we need this
     // value anywhere else so I didn't bother getting it from config.
     return hash(password, 10)
   }
 
   findUserById(id: number) {
-    return this.users.findOne({ id })
+    return this.usersService.findOne({ id })
+  }
+
+  private validatePassword(password: string): boolean {
+    if (password.match(/^[0-9]+$/) !== null) {
+      return false
+    }
+
+    if (password.startsWith('password') && password.length < 12) {
+      return false
+    }
+
+    if (this.forbiddenPasswords().includes(password)) {
+      return false
+    }
+
+    return true
   }
 
   private forbiddenPasswords(): string[] {
     return [
-      'password',
-      'password1',
-      'password12',
-      'password123',
       'iloveyou',
       'qwertyui',
       'qwertyuio',
       'qwertyuiop',
       'qwerty123',
       'qwerty1234',
-      '123qwerty',
-      '1234qwerty',
-      'q1w2e3r4',
-      '1q2w3e4r',
-      '11111111',
-      '22222222',
-      '33333333',
-      '44444444',
-      '55555555',
-      '66666666',
-      '77777777',
-      '88888888',
-      '99999999',
-      '00000000',
-      '123123123',
-      '12345678',
-      '123456789',
-      '1234567890',
+      'qwer1231',
+      '1234qwer',
     ]
   }
 }

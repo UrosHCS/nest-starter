@@ -1,7 +1,8 @@
 import { Body, Controller, Get, HttpCode, Post, Req } from '@nestjs/common'
-import { User } from 'src/database/entities/user.entity'
 import { Transformer } from 'src/shared/response/transformer'
 import { UserTransformer } from 'src/users/transformers/user.transformer'
+import { User } from 'src/users/user.entity'
+import { UsersService } from 'src/users/users.service'
 import { Auth } from './auth.decorator'
 import { AuthService } from './auth.service'
 import { LoginDto } from './dto/login.dto'
@@ -9,7 +10,10 @@ import { RegisterDto } from './dto/register.dto'
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('login')
   @HttpCode(200)
@@ -28,8 +32,8 @@ export class AuthController {
 
   @Auth()
   @Get('me')
-  me(@Req() req: any) {
-    return UserTransformer.make(req.user)
+  async me(@Req() req: any) {
+    return UserTransformer.make(await this.usersService.findOneOrFail({ id: req.user.id }))
   }
 
   private async logInResponse(user: User) {

@@ -1,1 +1,2 @@
-import './user.factory';
+import './password.factory'
+import './user.factory'

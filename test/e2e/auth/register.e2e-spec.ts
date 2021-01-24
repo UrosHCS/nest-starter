@@ -1,5 +1,6 @@
 import { compare } from 'bcrypt'
-import { Role, User } from 'src/database/entities/user.entity'
+import { Password } from 'src/auth/password.entity'
+import { Role, User } from 'src/users/user.entity'
 import { after, before, ctx } from '../ctx'
 
 describe('Register', () => {
@@ -7,7 +8,8 @@ describe('Register', () => {
 
   it('creates and logs in the user if fields are valid', async () => {
     const email = 'some@example.com'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -28,7 +30,8 @@ describe('Register', () => {
   it('hashes user password correctly', async () => {
     const email = 'some@example.com'
     const password = 'somePassword'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -36,11 +39,12 @@ describe('Register', () => {
       })
       .expect(201)
       .then(async () => {
-        const user = await ctx.repo(User).findOne({ email })
+        const user = await ctx.repo(User).findOneOrFail({ email })
         expect(user).toBeTruthy()
-        expect((user as User).password).not.toEqual(password)
+        const userPassword = await ctx.repo(Password).findOneOrFail({ userId: user.id })
+        expect(userPassword.value).not.toEqual(password)
 
-        const passwordsMatch = await compare('somePassword', (user as User).password)
+        const passwordsMatch = await compare('somePassword', userPassword.value)
         expect(passwordsMatch).toStrictEqual(true)
       })
   })
@@ -48,7 +52,8 @@ describe('Register', () => {
   it('trims email', async () => {
     const email = '  some@example.com  '
     const trimmedEmail = 'some@example.com'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -64,7 +69,8 @@ describe('Register', () => {
     const email = 'some@example.com'
     const password = '  somePassword  '
     const trimmedPassword = 'somePassword'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -72,18 +78,21 @@ describe('Register', () => {
       })
       .expect(201)
       .then(async () => {
-        const user = await ctx.repo(User).findOne({ email })
+        const user = await ctx.repo(User).findOneOrFail({ email })
         expect(user).toBeTruthy()
+        const userPassword = await ctx.repo(Password).findOneOrFail({ userId: user.id })
+        expect(userPassword.value).not.toEqual(password)
 
-        expect(await compare(trimmedPassword, (user as User).password)).toStrictEqual(false)
-        expect(await compare(password, (user as User).password)).toStrictEqual(true)
+        expect(await compare(trimmedPassword, userPassword.value)).toStrictEqual(false)
+        expect(await compare(password, userPassword.value)).toStrictEqual(true)
       })
   })
 
   it('does not allow common passwords', async () => {
     const email = 'some@example.com'
     const password = '12345678'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -101,7 +110,8 @@ describe('Register', () => {
 
   it('does not allow email and password to be the same', async () => {
     const email = 'some@example.com'
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email,
@@ -120,7 +130,8 @@ describe('Register', () => {
   it('fails if email already exists', async () => {
     const user = await ctx.createUser()
 
-    return ctx.request()
+    return ctx
+      .request()
       .post('/register')
       .send({
         email: user.email,

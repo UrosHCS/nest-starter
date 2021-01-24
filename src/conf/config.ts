@@ -1,4 +1,5 @@
-import { User } from "src/database/entities/user.entity"
+import { Password } from 'src/auth/password.entity'
+import { User } from 'src/users/user.entity'
 
 export default () => {
   const config = {
@@ -28,6 +29,7 @@ export default () => {
         // Instead of specifying a regex to find all entities, add them manually.
         // This avoids an error with mixing require() and ESM.
         User,
+        Password,
       ],
     },
   }

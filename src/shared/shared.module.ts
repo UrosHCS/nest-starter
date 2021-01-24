@@ -23,12 +23,7 @@ import { Exists } from './validators/exists'
     // We have to register Exists as a provider because it has dependencies
     // injected into its constructor.
     Exists,
-    // IsInCaseInsensitive does not have any DI so we don't have to register it in the module.
-    // IsInCaseInsensitive,
   ],
-  exports: [
-    Exists,
-    // IsInCaseInsensitive,
-  ],
+  exports: [Exists],
 })
 export class SharedModule {}

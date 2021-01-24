@@ -1,8 +1,9 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { AppModule } from 'src/app.module'
 import { AuthService } from 'src/auth/auth.service'
-import { User } from 'src/database/entities/user.entity'
+import { Password } from 'src/auth/password.entity'
 import { EntityConstructor, factory } from 'src/database/factories/factory'
+import { User } from 'src/users/user.entity'
 import { Request } from 'test/helpers/request'
 import { Connection, ObjectType, Repository } from 'typeorm'
 import { FastifyContext } from './fastify.context'
@@ -69,7 +70,13 @@ export class E2EContext extends FastifyContext {
     return this.factory(entityClass).create()
   }
 
-  createUser(): Promise<User> {
-    return this.create(User)
+  async createUser(): Promise<User> {
+    const user = await this.create(User)
+
+    await this.factory(Password).create({
+      userId: user.id,
+    })
+
+    return user
   }
 }

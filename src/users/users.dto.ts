@@ -1,15 +1,16 @@
 import { Type } from 'class-transformer'
-import { IsIn, IsInt, IsOptional, Min, Validate } from 'class-validator'
-import { safeUserFields, User } from 'src/database/entities/user.entity'
-import { IsInCaseInsensitive } from 'src/shared/validators/is-in-case-insensitive'
+import { IsIn, IsInt, IsOptional, Min } from 'class-validator'
+import { User } from 'src/users/user.entity'
+
+const userFields: Array<keyof User> = ['id', 'email', 'role', 'createdAt', 'updatedAt']
 
 export class UsersFilter {
   @IsOptional()
-  @IsIn(safeUserFields)
+  @IsIn(userFields)
   order?: keyof User
 
   @IsOptional()
-  @Validate(IsInCaseInsensitive, [['asc', 'desc']])
+  @IsIn(['asc', 'desc'])
   direction?: 'asc' | 'desc' | 'ASC' | 'DESC'
 
   @IsOptional()

@@ -1,4 +1,4 @@
-import { User } from 'src/database/entities/user.entity'
+import { User } from 'src/users/user.entity'
 import { after, before, ctx } from '../ctx'
 
 describe('users get', () => {
@@ -13,7 +13,8 @@ describe('users get', () => {
   })
 
   it('returns the user if it exists', async () => {
-    return ctx.request()
+    return ctx
+      .request()
       .get('/users/' + user.id)
       .expect(200)
       .expect((res) => {
@@ -23,7 +24,8 @@ describe('users get', () => {
   })
 
   it('fails if the user does not exist', async () => {
-    return ctx.request()
+    return ctx
+      .request()
       .get('/users/' + user.id + 1)
       .expect(404)
       .expect((res) => {

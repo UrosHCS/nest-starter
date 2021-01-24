@@ -16,6 +16,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // Passport will attach the return value as a property on the Request object.
-    return this.authService.findUserById(payload.sub)
+    return {
+      id: payload.sub,
+    }
+    // return this.authService.findUserById(payload.sub)
   }
 }
