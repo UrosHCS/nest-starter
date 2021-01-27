@@ -8,11 +8,8 @@ if (!fs.existsSync('./dist')) {
 
 const { NestFactory } = require('@nestjs/core')
 const { FastifyAdapter } = require('@nestjs/platform-fastify')
-const { AppModule } = require('../dist/app.module')
-
-// We are reading this folder just for entity names. Since work dir
-// the root dir, this path is fine.
-const entitiesLocation = './src/database/entities'
+const { AppModule } = require('../dist/src/app.module')
+const { getMetadataArgsStorage } = require('typeorm')
 
 module.exports = NestFactory.create(AppModule, new FastifyAdapter())
   .then(app => {
@@ -27,31 +24,22 @@ module.exports = NestFactory.create(AppModule, new FastifyAdapter())
     // The app implements INestApplicationContext interface
     registerGlobal('app', app, 'nest application instance')
 
-    const entities = fs.readdirSync(entitiesLocation)
+    for (const repoMeta of getMetadataArgsStorage().entityRepositories) {
+      const repoClass = repoMeta.target
+      const entityClass = repoMeta.entity
+      const repoVarName = repoClass.name.charAt(0).toLowerCase() + repoClass.name.slice(1)
 
-    for (const entityName of entities) {
-      const name = entityName.split('.')[0]
-
-      const entityInstanceName = name.replace(/-./g, match => match[1].toUpperCase())
-      const entityClassName = entityInstanceName[0].toUpperCase() + entityInstanceName.substring(1)
-      const repoName = `${entityClassName}Repository`
-
-      let entityModule = require(`../dist/database/entities/${name}.entity`)
-
-      registerGlobal(entityClassName, entityModule[entityClassName], 'entity class')
-
-      // Here we will ignore error if a repo doesn't exist
-      try {
-        let repo = require(`../dist/database/repositories/${name}.repository`)
-        registerGlobal(`${entityInstanceName}Repo`, app.get(repo[repoName]), 'repository instance')
-      } catch (e) {
-        // Do nothing
+      if (typeof entityClass !== 'function') {
+        throw new Error('Entity class is not a constructor. Failing...')
       }
+
+      registerGlobal(entityClass.name, entityClass, 'entity class')
+      registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
     }
 
-    require('../dist/database/factories/definitions')
+    require('../dist/src/database/factories/definitions')
 
-    const factory = require('../dist/database/factories/factory').factory
+    const { factory } = require('../dist/src/database/factories/factory')
 
     registerGlobal('factory', factory, 'function for making entities')
 

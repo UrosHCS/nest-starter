@@ -1,15 +1,18 @@
 // TODO: make a cool seeding package instead of this
 'use strict'
 
-const { Role, User } = require('../dist/database/entities/user.entity')
+const { Role, User } = require('../dist/src/users/user.entity')
+const { Password } = require('../dist/src/auth/password.entity')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
-const { factory } = require('../dist/database/factories/factory')
+const { factory } = require('../dist/src/database/factories/factory')
 
 require('./cli-set-up').then(async () => {
   
   await getRepository(User).delete({
     id: MoreThanOrEqual(1)
   })
+
+  const passwordFactory = factory(Password)
 
   const userFactory = factory(User)
 
@@ -19,17 +22,23 @@ require('./cli-set-up').then(async () => {
     role: Role.admin,
   })
 
+  await passwordFactory.create({ user })
+
   user = await userFactory.create({
     name: 'client',
     email: 'client@example.com',
     role: Role.client,
   })
 
+  await passwordFactory.create({ user })
+
   user = await userFactory.create({
     name: 'john',
     email: 'john@example.com',
     role: Role.client,
   })
+
+  await passwordFactory.create({ user })
 
 }).then(() => {
 
@@ -38,6 +47,6 @@ require('./cli-set-up').then(async () => {
 
 }).catch(reason => {
 
-  console.log(reason);
+  console.log(reason)
 
 })

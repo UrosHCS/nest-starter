@@ -20,11 +20,8 @@ const config = {
   database: process.env.DB_DATABASE,
   synchronize: false,
   logging: false,
-  entities: ['src/database/entities/*.ts'],
-  migrations: ['database/migrations/*.ts'],
-  cli: {
-    entitiesDir: 'src/database/entities',
-  },
+  entities: ['src/**/*entity.ts'],
+  migrations: ['src/**/*migration.ts'],
 }
 
 // Here you can console log config to make sure the env variables are ok

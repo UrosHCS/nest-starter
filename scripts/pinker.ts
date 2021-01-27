@@ -1,10 +1,9 @@
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
-import * as fs from 'fs'
 import { AppModule } from 'src/app.module'
+import { getMetadataArgsStorage } from 'typeorm'
 
 async function pinker(app: NestFastifyApplication) {
-  // Keep track so we can print them for the user
   let registeredGlobalVariables = {}
 
   function registerGlobal(key: string, value: any, description: string = '?') {
@@ -12,32 +11,21 @@ async function pinker(app: NestFastifyApplication) {
     global[key] = value
   }
 
-  // The app implements INestApplicationContext interface
   registerGlobal('app', app, 'nest application instance')
 
-  const entities = fs.readdirSync('src/database/entities')
+  for (const repoMeta of getMetadataArgsStorage().entityRepositories) {
+    const repoClass = repoMeta.target
+    const entityClass = repoMeta.entity
+    const repoVarName = repoClass.name.charAt(0).toLowerCase() + repoClass.name.slice(1)
 
-  for (const entityName of entities) {
-    const name = entityName.split('.')[0]
-
-    const entityInstanceName = name.replace(/-./g, (match) => match[1].toUpperCase())
-    const entityClassName = entityInstanceName[0].toUpperCase() + entityInstanceName.substring(1)
-    const repoName = `${entityClassName}Repository`
-
-    let entityModule = await import(`../src/database/entities/${name}.entity`)
-
-    registerGlobal(entityClassName, entityModule[entityClassName], 'entity class')
-
-    // Here we will ignore error if a repo doesn't exist
-    try {
-      let repo = await import(`../src/database/repositories/${name}.repository`)
-      registerGlobal(`${entityInstanceName}Repo`, app.get(repo[repoName]), 'repository instance')
-    } catch (e) {
-      // Do nothing
+    if (typeof entityClass !== 'function') {
+      throw new Error('Entity class is not a constructor. Failing...')
     }
+
+    registerGlobal(entityClass.name, entityClass, 'entity class')
+    registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
   }
 
-  // register factories
   await import('../src/database/factories/definitions')
 
   const factory = (await import('../src/database/factories/factory')).factory
@@ -51,13 +39,7 @@ async function pinker(app: NestFastifyApplication) {
 }
 
 async function bootstrap(): Promise<NestFastifyApplication> {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    // This is where we tell nest to use fastify
-    new FastifyAdapter(),
-  )
-  console.log('------------------------------------')
-  return app
+  return await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
 }
 
 bootstrap()
