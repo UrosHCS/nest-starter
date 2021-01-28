@@ -11,6 +11,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
+    "rootDir": "./",
     // outDir is mandatory so that tsc compiles everything to dist folder
     "outDir": "./dist",
     "baseUrl": "./",

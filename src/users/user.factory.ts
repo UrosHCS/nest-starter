@@ -1,5 +1,5 @@
-import { Role, User } from '../../users/user.entity'
-import { define } from './factory'
+import { define } from 'src/shared/factories/factory'
+import { Role, User } from './user.entity'
 
 define(User, async (faker, attributes) => {
   return {

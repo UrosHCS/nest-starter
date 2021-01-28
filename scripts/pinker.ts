@@ -26,9 +26,9 @@ async function pinker(app: NestFastifyApplication) {
     registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
   }
 
-  await import('../src/database/factories/definitions')
+  await import('../src/shared/factories/definitions')
 
-  const factory = (await import('../src/database/factories/factory')).factory
+  const factory = (await import('../src/shared/factories/factory')).factory
 
   registerGlobal('factory', factory, 'function for making entities')
 

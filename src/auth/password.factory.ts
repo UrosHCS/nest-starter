@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt'
 import { Password } from 'src/auth/password.entity'
-import { define } from './factory'
+import { define } from '../shared/factories/factory'
 
 define(Password, async (faker, attributes) => {
   return {

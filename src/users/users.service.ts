@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Paginator } from 'src/database/paginator'
+import { Paginator } from 'src/shared/database/paginator'
 import { Role, User } from 'src/users/user.entity'
 import { UserRepository } from 'src/users/user.repository'
 import { FindConditions } from 'typeorm'

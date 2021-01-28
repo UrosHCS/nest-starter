@@ -1,4 +1,4 @@
-import { BaseRepository } from 'src/database/base.repository'
+import { BaseRepository } from 'src/shared/database/base.repository'
 import { EntityRepository, Not } from 'typeorm'
 import { Role, User } from './user.entity'
 

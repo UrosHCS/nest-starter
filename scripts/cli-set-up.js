@@ -37,9 +37,9 @@ module.exports = NestFactory.create(AppModule, new FastifyAdapter())
       registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
     }
 
-    require('../dist/src/database/factories/definitions')
+    require('../dist/src/shared/factories/definitions')
 
-    const { factory } = require('../dist/src/database/factories/factory')
+    const { factory } = require('../dist/src/shared/factories/factory')
 
     registerGlobal('factory', factory, 'function for making entities')
 

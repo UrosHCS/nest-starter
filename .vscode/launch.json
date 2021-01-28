@@ -56,7 +56,8 @@
             "internalConsoleOptions": "neverOpen",
             "port": 9229,
             "skipFiles": [
-                "<node_internals>/**"
+                "<node_internals>/**",
+                "node_modules/**"
             ],
         }
     ]

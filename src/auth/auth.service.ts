@@ -34,7 +34,7 @@ export class AuthService {
       throw new BadRequestException('Password cannot be same as email.')
     }
 
-    if (this.validatePassword(password)) {
+    if (!this.validatePassword(password)) {
       throw new BadRequestException(`Password ${password} can't be used because it is too common.`)
     }
 

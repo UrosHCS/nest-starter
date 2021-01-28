@@ -2,7 +2,7 @@ import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { AppModule } from 'src/app.module'
 import { AuthService } from 'src/auth/auth.service'
 import { Password } from 'src/auth/password.entity'
-import { EntityConstructor, factory } from 'src/database/factories/factory'
+import { EntityConstructor, factory } from 'src/shared/factories/factory'
 import { User } from 'src/users/user.entity'
 import { Request } from 'test/helpers/request'
 import { Connection, ObjectType, Repository } from 'typeorm'
@@ -29,7 +29,7 @@ export class E2EContext extends FastifyContext {
 
   async before() {
     // This is how we register all defined factories
-    import('src/database/factories/definitions')
+    import('src/shared/factories/definitions')
     await super.before()
     this.req.setServer(this.app.getHttpServer())
   }

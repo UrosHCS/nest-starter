@@ -19,6 +19,13 @@ This repository was inspired by the amazing [Laravel](https://laravel.com/) fram
 
 Some smaller features also, check out the `shared` module.
 
+TODO:
+
+- Write a seeding package,
+- Set up websocket,
+- Set up mail,
+- Set up auth with google and facebook,
+
 ## Set up
 
 Clone this project, then run

@@ -18,8 +18,7 @@ async function bootstrap() {
 
   // We do the same setup here and in tests
   appSetup(app)
-  
-  
+
   await app.listen(port, host)
 }
 bootstrap().then(() => {
