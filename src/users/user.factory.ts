@@ -1,10 +1,14 @@
-import { define } from 'src/shared/factories/factory'
+import { BaseFactory } from 'src/shared/factories/factory'
 import { Role, User } from './user.entity'
 
-define(User, async (faker, attributes) => {
-  return {
-    name: faker.internet.userName(),
-    email: faker.internet.email(),
-    role: Role.client,
+export class UserFactory extends BaseFactory<User> {
+  protected entityClass = User
+
+  public definition() {
+    return {
+      name: this.faker.internet.userName(),
+      email: this.faker.internet.email(),
+      role: Role.client,
+    }
   }
-})
+}

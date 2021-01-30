@@ -1,17 +1,17 @@
 import * as Faker from 'faker'
 import { getRepository } from 'typeorm'
 
-// Entity attributes but can also contain a FactoryBuilder
-type Attributes<E> = {
+// Entity attributes but can also contain a Factory
+export type Attributes<E> = {
   [P in keyof E]?: Attribute<E, P>
 }
 
-// Entity attribute but can also be a FactoryBuilder in some cases.
+// Entity attribute but can also be a Factory in some cases.
 // If column property is one of the ColumnAttribute types then we can't have a factory for it.
-// Otherwise it is a relation. And for some relations, a FactoryBuilder is allowed.
+// Otherwise it is a relation. And for some relations, a Factory is allowed.
 type Attribute<E, P extends keyof E> = E[P] extends NestedFactoryNotAvailable
   ? E[P]
-  : E[P] | RelationSpecificFactoryBuilder<E, P>
+  : E[P] | RelationSpecificFactory<E, P>
 
 // In typeorm column can be represented by some of the following types.
 // Also, enums can be used, but we cannot add object type because
@@ -25,9 +25,9 @@ type NestedFactoryNotAvailable = ColumnAttribute | any[]
 
 // Relation can be defined by its type or a factory of it. If the relation
 // is an array, then the factory must be of the array element type.
-type RelationSpecificFactoryBuilder<E, P extends keyof E> = E[P] extends Array<infer U>
-  ? FactoryBuilder<U>
-  : FactoryBuilder<E[P]>
+type RelationSpecificFactory<E, P extends keyof E> = E[P] extends Array<infer U>
+  ? FactoryInterface<U>
+  : FactoryInterface<E[P]>
 
 // The signature of the callback that creates the entity attributes.
 export type FactoryMethod<E> = (
@@ -35,46 +35,30 @@ export type FactoryMethod<E> = (
   attributes: Attributes<E>,
 ) => Attributes<E> | Promise<Attributes<E>>
 
-export type EntityConstructor<E> = new () => E
+export type NoArgConstructor<Class> = new () => Class
 
 // Creating one entity needs just attributes for it (which are actually optional)
-type CreatorOfOne<E> = (attributes: Attributes<E>) => Promise<E>
+type CreatorOfOne<E> = (attributes?: Attributes<E>) => Promise<E>
 
 // Creating many entities needs an amount to create and optional attributes for them.
-type CreatorOfMany<E> = (amount: number, attributes: Attributes<E>) => Promise<E[]>
+type CreatorOfMany<E> = (amount: number, attributes?: Attributes<E>) => Promise<E[]>
 
-// Just to define the public api of the FactoryBuilder
-interface FactoryBuilderInterface<E> {
+// Just to define the public api of the Factory
+interface FactoryInterface<E> {
   create: CreatorOfOne<E>
   make: CreatorOfOne<E>
   createMany: CreatorOfMany<E>
   makeMany: CreatorOfMany<E>
+  definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>
 }
 
-// This where we keep a list of defined factories.
-const factories: { [key: string]: FactoryMethod<any> } = {}
+export abstract class BaseFactory<E> implements FactoryInterface<E> {
+  protected faker = Faker
+  protected abstract entityClass: NoArgConstructor<E>
 
-// The function defines a factory for a single entity class
-export const define = <E>(entityClass: EntityConstructor<E>, callback: FactoryMethod<E>): void => {
-  if (factories[entityClass.name]) {
-    throw new Error(`Factory for entity ${entityClass.name} is already defined.`)
+  static new<F>(this: NoArgConstructor<F>): F {
+    return new this()
   }
-
-  factories[entityClass.name] = callback
-}
-
-// A helper function to make a factory builder
-export const factory = <E>(entityClass: EntityConstructor<E>): FactoryBuilder<E> => {
-  // Make sure the factory for entity is defined
-  if (!factories[entityClass.name]) {
-    throw new Error(`Factory for entity ${entityClass.name} is not defined.`)
-  }
-
-  return new FactoryBuilder<E>(entityClass, factories[entityClass.name])
-}
-
-export class FactoryBuilder<E> implements FactoryBuilderInterface<E> {
-  constructor(public entityClass: EntityConstructor<E>, public factoryMethod: FactoryMethod<E>) {}
 
   async create(attributes: Attributes<E> = {}): Promise<E> {
     const entity = await this.make(attributes)
@@ -88,7 +72,7 @@ export class FactoryBuilder<E> implements FactoryBuilderInterface<E> {
     const entity = new this.entityClass()
 
     // First get the attributes from the defined factory.
-    const factoryAttributes = await this.factoryMethod(Faker, attributes)
+    const factoryAttributes = await this.definition(attributes)
 
     // Then override them with the attributes passed to this method.
     attributes = { ...factoryAttributes, ...attributes }
@@ -98,11 +82,11 @@ export class FactoryBuilder<E> implements FactoryBuilderInterface<E> {
       if (attributes.hasOwnProperty(key)) {
         const attribute = attributes[key]
 
-        if (attribute instanceof FactoryBuilder) {
+        if (attribute instanceof BaseFactory) {
           // We are gonna create() that relation even if only make() method was called.
           entity[key] = await attribute.create()
         } else {
-          // TypeScript doesn't understand that if an Attribute<E> is not a FactoryBuilder
+          // TypeScript doesn't understand that if an Attribute<E> is not a Factory
           // it is then just "E[Extract<keyof E, string>]" so we need to tell it.
           entity[key] = attribute as E[Extract<keyof E, string>]
         }
@@ -133,4 +117,6 @@ export class FactoryBuilder<E> implements FactoryBuilderInterface<E> {
 
     return Promise.all(entities)
   }
+
+  public abstract definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>
 }

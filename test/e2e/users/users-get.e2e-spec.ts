@@ -1,4 +1,5 @@
 import { User } from 'src/users/user.entity'
+import { UserFactory } from 'src/users/user.factory'
 import { after, before, ctx } from '../ctx'
 
 describe('users get', () => {
@@ -9,7 +10,7 @@ describe('users get', () => {
   // for afterAll. This could be less safe then beforeEach, I'm not sure.
   beforeAll(async () => {
     await before()
-    user = await ctx.factory(User).create()
+    user = await new UserFactory().create()
   })
 
   it('returns the user if it exists', async () => {

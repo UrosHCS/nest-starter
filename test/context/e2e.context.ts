@@ -1,9 +1,9 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { AppModule } from 'src/app.module'
 import { AuthService } from 'src/auth/auth.service'
-import { Password } from 'src/auth/password.entity'
-import { EntityConstructor, factory } from 'src/shared/factories/factory'
+import { PasswordFactory } from 'src/auth/password.factory'
 import { User } from 'src/users/user.entity'
+import { UserFactory } from 'src/users/user.factory'
 import { Request } from 'test/helpers/request'
 import { Connection, ObjectType, Repository } from 'typeorm'
 import { FastifyContext } from './fastify.context'
@@ -28,8 +28,6 @@ export class E2EContext extends FastifyContext {
   }
 
   async before() {
-    // This is how we register all defined factories
-    import('src/shared/factories/definitions')
     await super.before()
     this.req.setServer(this.app.getHttpServer())
   }
@@ -59,21 +57,10 @@ export class E2EContext extends FastifyContext {
     return this.req
   }
 
-  factory<E>(entityClass: EntityConstructor<E>) {
-    return factory(entityClass)
-  }
-
-  /**
-   * Wrapper around factory seeding of a single entity
-   */
-  create<Entity>(entityClass: EntityConstructor<Entity>): Promise<Entity> {
-    return this.factory(entityClass).create()
-  }
-
   async createUser(): Promise<User> {
-    const user = await this.create(User)
+    const user = await new UserFactory().create()
 
-    await this.factory(Password).create({
+    await new PasswordFactory().create({
       userId: user.id,
     })
 

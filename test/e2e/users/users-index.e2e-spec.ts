@@ -1,4 +1,5 @@
 import { User } from 'src/users/user.entity'
+import { UserFactory } from 'src/users/user.factory'
 import { after, before, ctx } from '../ctx'
 
 describe('users index', () => {
@@ -9,7 +10,7 @@ describe('users index', () => {
   // for afterAll. This could be less safe then beforeEach, I'm not sure.
   beforeAll(async () => {
     await before()
-    users = await ctx.factory(User).createMany(3)
+    users = await new UserFactory().createMany(3)
   })
 
   it('returns all users if limit is big enough', async () => {

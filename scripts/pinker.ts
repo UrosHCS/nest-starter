@@ -26,12 +26,6 @@ async function pinker(app: NestFastifyApplication) {
     registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
   }
 
-  await import('../src/shared/factories/definitions')
-
-  const factory = (await import('../src/shared/factories/factory')).factory
-
-  registerGlobal('factory', factory, 'function for making entities')
-
   registerGlobal('globals', registeredGlobalVariables, 'list of registered global variables')
 
   console.log('\nWelcome to pinker! Here are all the registered global variables:')
