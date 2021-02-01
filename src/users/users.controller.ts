@@ -10,7 +10,7 @@ export class UsersController {
 
   @Get()
   index(@Query() query: UsersFilter) {
-    return this.service.index(query)
+    return this.service.paginate(query)
   }
 
   // Just an example of a collection transformer

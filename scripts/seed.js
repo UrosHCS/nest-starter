@@ -2,9 +2,10 @@
 'use strict'
 
 const { Role, User } = require('../dist/src/users/user.entity')
+const { UserFactory } = require('../dist/src/users/user.factory')
 const { Password } = require('../dist/src/auth/password.entity')
+const { PasswordFactory } = require('../dist/src/auth/password.factory')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
-const { factory } = require('../dist/src/database/factories/factory')
 
 require('./cli-set-up').then(async () => {
   
@@ -12,33 +13,29 @@ require('./cli-set-up').then(async () => {
     id: MoreThanOrEqual(1)
   })
 
-  const passwordFactory = factory(Password)
-
-  const userFactory = factory(User)
-
-  let user = await userFactory.create({
+  let user = await new UserFactory.create({
     name: 'admin',
     email: 'admin@example.com',
     role: Role.admin,
   })
 
-  await passwordFactory.create({ user })
+  await new PasswordFactory.create({ user })
 
-  user = await userFactory.create({
+  user = await new UserFactory.create({
     name: 'client',
     email: 'client@example.com',
     role: Role.client,
   })
 
-  await passwordFactory.create({ user })
+  await new PasswordFactory.create({ user })
 
-  user = await userFactory.create({
+  user = await new UserFactory.create({
     name: 'john',
     email: 'john@example.com',
     role: Role.client,
   })
 
-  await passwordFactory.create({ user })
+  await new PasswordFactory.create({ user })
 
 }).then(() => {
 

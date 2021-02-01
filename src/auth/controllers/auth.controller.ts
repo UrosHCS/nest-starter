@@ -3,10 +3,10 @@ import { Transformer } from 'src/shared/response/transformer'
 import { UserTransformer } from 'src/users/transformers/user.transformer'
 import { User } from 'src/users/user.entity'
 import { UsersService } from 'src/users/users.service'
-import { Auth } from './auth.decorator'
-import { AuthService } from './auth.service'
-import { LoginDto } from './dto/login.dto'
-import { RegisterDto } from './dto/register.dto'
+import { Auth } from '../auth.decorator'
+import { AuthService } from '../auth.service'
+import { LoginDto } from '../dto/login.dto'
+import { RegisterDto } from '../dto/register.dto'
 
 @Controller()
 export class AuthController {

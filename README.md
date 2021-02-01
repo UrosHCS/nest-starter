@@ -24,6 +24,7 @@ TODO:
 - Write a seeding package,
 - Set up websocket,
 - Set up mail,
+- Set up image upload,
 - Set up auth with google and facebook,
 
 ## Set up

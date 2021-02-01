@@ -4,10 +4,12 @@ import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfService } from 'src/conf/conf.service'
 import { UsersModule } from 'src/users/users.module'
-import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { JwtStrategy } from './jwt.strategy'
+import { AuthController } from './controllers/auth.controller'
+import { GoogleController } from './controllers/google.controller'
 import { PasswordRepository } from './password.repository'
+import { GoogleStrategy } from './strategies/google.strategy'
+import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { PasswordRepository } from './password.repository'
       useFactory: (conf: ConfService) => conf.jwt,
     }),
   ],
-  providers: [AuthService, JwtStrategy],
-  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  controllers: [AuthController, GoogleController],
 })
 export class AuthModule {}

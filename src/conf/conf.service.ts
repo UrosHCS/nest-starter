@@ -16,6 +16,10 @@ export class ConfService implements TypeOrmOptionsFactory {
     return this.getStrict<TypeOrmModuleOptions>('database')
   }
 
+  get google() {
+    return this.getStrict('google')
+  }
+
   get<T>(propertyPath: string, defaultValue: NoInferType<T>): T | undefined {
     return this.configService.get<T>(propertyPath, defaultValue)
   }

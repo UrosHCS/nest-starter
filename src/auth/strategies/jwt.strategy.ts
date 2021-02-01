@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { ConfService } from 'src/conf/conf.service'
-import { AuthService } from './auth.service'
+import { AuthService } from '../auth.service'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,6 +19,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       id: payload.sub,
     }
-    // return this.authService.findUserById(payload.sub)
   }
 }

@@ -9,7 +9,7 @@ import { UsersFilter } from './users.dto'
 export class UsersService {
   constructor(private readonly repo: UserRepository) {}
 
-  index(filter: UsersFilter): Promise<Paginator<User>> {
+  paginate(filter: UsersFilter): Promise<Paginator<User>> {
     const orderColumn = filter.order ? filter.order.toLowerCase() : 'id'
     const direction = filter.direction ? filter.direction.toUpperCase() : 'ASC'
 
