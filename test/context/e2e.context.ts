@@ -6,9 +6,9 @@ import { User } from 'src/users/user.entity'
 import { UserFactory } from 'src/users/user.factory'
 import { Request } from 'test/helpers/request'
 import { Connection, ObjectType, Repository } from 'typeorm'
-import { FastifyContext } from './fastify.context'
+import { ExpressContext } from './express.context'
 
-export class E2EContext extends FastifyContext {
+export class E2EContext extends ExpressContext {
   /**
    * Request wrapper object, uses supertest to make requests.
    */

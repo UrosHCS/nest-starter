@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core'
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
 import { AppModule } from 'src/app.module'
 import { getMetadataArgsStorage } from 'typeorm'
 
-async function pinker(app: NestFastifyApplication) {
+async function pinker(app: NestExpressApplication) {
   let registeredGlobalVariables = {}
 
   function registerGlobal(key: string, value: any, description: string = '?') {
@@ -32,8 +32,8 @@ async function pinker(app: NestFastifyApplication) {
   console.log(registeredGlobalVariables)
 }
 
-async function bootstrap(): Promise<NestFastifyApplication> {
-  return await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
+async function bootstrap(): Promise<NestExpressApplication> {
+  return await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter())
 }
 
 bootstrap()

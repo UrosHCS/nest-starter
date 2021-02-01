@@ -7,11 +7,10 @@ if (!fs.existsSync('./dist')) {
 }
 
 const { NestFactory } = require('@nestjs/core')
-const { FastifyAdapter } = require('@nestjs/platform-fastify')
 const { AppModule } = require('../dist/src/app.module')
 const { getMetadataArgsStorage } = require('typeorm')
 
-module.exports = NestFactory.create(AppModule, new FastifyAdapter())
+module.exports = NestFactory.create(AppModule)
   .then(app => {
     // Keep track so we can print them for the user
     let registeredGlobalVariables = {}

@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core'
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
 import { appSetup } from './app-setup'
 import { AppModule } from './app.module'
 
@@ -10,11 +10,7 @@ const host = process.env.NODE_HOST || 'localhost'
 process.env.NODE_ENV = process.env.NODE_ENV || 'develop'
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    // This is where we tell nest to use fastify
-    new FastifyAdapter(),
-  )
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter())
 
   // We do the same setup here and in tests
   appSetup(app)

@@ -30,7 +30,7 @@ describe('users get', () => {
       .get('/users/' + user.id + 1)
       .expect(404)
       .expect((res) => {
-        expect(res.body.error).toEqual('Not found')
+        expect(res.body.error).toEqual('Not Found')
       })
   })
 

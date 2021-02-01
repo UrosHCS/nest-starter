@@ -13,10 +13,8 @@ export abstract class TransformRequest implements NestInterceptor {
 
     // If you use express adapter you will have
     // req.method
-    // If you use fastify adapter you will have
-    // req.raw.method
 
-    if (req.raw.method !== 'GET') {
+    if (req.method !== 'GET') {
       req.body = this.cleanObject(req.body)
     }
   }

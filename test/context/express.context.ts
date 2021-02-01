@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common'
 import { ModuleMetadata } from '@nestjs/common/interfaces'
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
 import { Test, TestingModule } from '@nestjs/testing'
 import { appSetup } from 'src/app-setup'
 import { TestContext } from './test.context'
 
-export abstract class FastifyContext extends TestContext {
+export abstract class ExpressContext extends TestContext {
   /**
    * Return module metadata that you want in your nest app instance.
    */
@@ -16,15 +16,12 @@ export abstract class FastifyContext extends TestContext {
       this.moduleMetadata(),
     ).compile()
 
-    const app = moduleFixture.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
+    const app = moduleFixture.createNestApplication<NestExpressApplication>(new ExpressAdapter())
 
     // We do the same setup here and in main
     appSetup(app)
 
     await app.init()
-
-    // this line is needed when fastify adapter is used
-    await app.getHttpAdapter().getInstance().ready()
 
     return app
   }
