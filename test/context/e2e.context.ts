@@ -60,9 +60,7 @@ export class E2EContext extends ExpressContext {
   async createUser(): Promise<User> {
     const user = await new UserFactory().create()
 
-    await new PasswordFactory().create({
-      userId: user.id,
-    })
+    await new PasswordFactory().create({ user })
 
     return user
   }
