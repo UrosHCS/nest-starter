@@ -54,10 +54,13 @@ interface FactoryInterface<E> {
 
 export abstract class BaseFactory<E> implements FactoryInterface<E> {
   protected faker = Faker
+  protected attributes: Attributes<E> = {}
   protected abstract entityClass: NoArgConstructor<E>
 
-  static new<F>(this: NoArgConstructor<F>): F {
-    return new this()
+  state(attributes: Attributes<E>) {
+    Object.assign(this.attributes, attributes)
+
+    return this
   }
 
   async create(attributes: Attributes<E> = {}): Promise<E> {
@@ -74,8 +77,9 @@ export abstract class BaseFactory<E> implements FactoryInterface<E> {
     // First get the attributes from the defined factory.
     const factoryAttributes = await this.definition(attributes)
 
+    // Then override them with the state attributes.
     // Then override them with the attributes passed to this method.
-    attributes = { ...factoryAttributes, ...attributes }
+    attributes = { ...factoryAttributes, ...this.attributes, ...attributes }
 
     // Now fill the entity with attributes.
     for (const key in attributes) {

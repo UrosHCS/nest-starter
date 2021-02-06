@@ -1,4 +1,4 @@
-import { after, before, ctx } from "../ctx"
+import { after, before, ctx } from '../ctx'
 
 describe('LogIn', () => {
   beforeEach(before)
@@ -6,7 +6,8 @@ describe('LogIn', () => {
   it('logs in if credentials are valid', async () => {
     const user = await ctx.createUser()
 
-    return ctx.request()
+    return ctx
+      .request()
       .post('/login')
       .send({ email: user.email, password: 'password' })
       .expect(200)
@@ -24,7 +25,8 @@ describe('LogIn', () => {
   it('returns 401 if credentials are invalid', async () => {
     const user = await ctx.createUser()
 
-    return ctx.request()
+    return ctx
+      .request()
       .post('/login')
       .send({
         email: user.email,
