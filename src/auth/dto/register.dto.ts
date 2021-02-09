@@ -1,10 +1,10 @@
 import { IsEmail, Length, Validate } from 'class-validator'
-import { Exists } from 'src/shared/validators/exists'
+import { DoesNotExist } from 'src/shared/validators/does.not.exist'
 import { User } from 'src/users/user.entity'
 
 export class RegisterDto {
   @IsEmail()
-  @Validate(Exists, [User, 'email'])
+  @Validate(DoesNotExist, [User, 'email'])
   email: string
 
   @Length(8, 255)

@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common'
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core'
 import { EntityNotFoundFilter } from './filters/entity-not-found.filter'
 import { TrimStrings } from './interceptors/trim.strings'
-import { Exists } from './validators/exists'
+import { DoesNotExist } from './validators/does.not.exist'
 // import { IsInCaseInsensitive } from './validators/is.in.case.insensitive'
 
 @Global()
@@ -20,10 +20,10 @@ import { Exists } from './validators/exists'
       provide: APP_FILTER,
       useClass: EntityNotFoundFilter,
     },
-    // We have to register Exists as a provider because it has dependencies
+    // We have to register DoesNotExist as a provider because it has dependencies
     // injected into its constructor.
-    Exists,
+    DoesNotExist,
   ],
-  exports: [Exists],
+  exports: [DoesNotExist],
 })
 export class SharedModule {}

@@ -147,7 +147,7 @@ describe('Register', () => {
               property: 'email',
               children: [],
               constraints: {
-                exists: 'User with that email already exists.',
+                doesNotExist: 'User with that email already exists.',
               },
             },
           ],

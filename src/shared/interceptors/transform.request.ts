@@ -11,9 +11,6 @@ export abstract class TransformRequest implements NestInterceptor {
     req.query = this.cleanObject(req.query)
     req.params = this.cleanObject(req.params)
 
-    // If you use express adapter you will have
-    // req.method
-
     if (req.method !== 'GET') {
       req.body = this.cleanObject(req.body)
     }
