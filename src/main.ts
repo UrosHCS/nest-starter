@@ -15,6 +15,8 @@ async function bootstrap() {
   // We do the same setup here and in tests
   appSetup(app)
 
+  app.enableCors()
+
   await app.listen(port, host)
 }
 bootstrap().then(() => {
