@@ -4,28 +4,30 @@ import { UserTransformer } from 'src/users/transformers/user.transformer'
 import { User } from 'src/users/user.entity'
 import { UsersService } from 'src/users/users.service'
 import { Auth } from '../auth.decorator'
-import { AuthService } from '../auth.service'
 import { LoginDto } from '../dto/login.dto'
 import { RegisterDto } from '../dto/register.dto'
+import { LocalService } from '../services/local.service'
+import { TokenService } from '../services/token.service'
 
 @Controller()
-export class AuthController {
+export class LocalController {
   constructor(
-    private readonly authService: AuthService,
+    private readonly localService: LocalService,
+    private readonly tokenService: TokenService,
     private readonly usersService: UsersService,
   ) {}
 
   @Post('login')
   @HttpCode(200)
   async logIn(@Body() body: LoginDto) {
-    const user = await this.authService.findAndValidateUser(body.email, body.password)
+    const user = await this.localService.findAndValidateUser(body.email, body.password)
 
     return this.logInResponse(user)
   }
 
   @Post('register')
   async register(@Body() body: RegisterDto) {
-    const user = await this.authService.registerUser(body.email, body.password)
+    const user = await this.localService.registerUser(body.email, body.password)
 
     return this.logInResponse(user)
   }
@@ -37,10 +39,8 @@ export class AuthController {
   }
 
   private async logInResponse(user: User) {
-    const token = await this.authService.makeToken(user)
-
     return Transformer.make({
-      token,
+      token: await this.tokenService.makeToken(user),
       user: new UserTransformer(user).transform(),
     })
   }

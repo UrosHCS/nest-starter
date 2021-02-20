@@ -4,10 +4,12 @@ import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfService } from 'src/conf/conf.service'
 import { UsersModule } from 'src/users/users.module'
-import { AuthService } from './auth.service'
-import { AuthController } from './controllers/auth.controller'
 import { GoogleController } from './controllers/google.controller'
+import { LocalController } from './controllers/local.controller'
 import { PasswordRepository } from './password.repository'
+import { GoogleService } from './services/google.service'
+import { LocalService } from './services/local.service'
+import { TokenService } from './services/token.service'
 import { GoogleStrategy } from './strategies/google.strategy'
 import { JwtStrategy } from './strategies/jwt.strategy'
 
@@ -22,7 +24,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
       useFactory: (conf: ConfService) => conf.jwt,
     }),
   ],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
-  controllers: [AuthController, GoogleController],
+  providers: [GoogleService, LocalService, TokenService, JwtStrategy, GoogleStrategy],
+  controllers: [LocalController, GoogleController],
 })
 export class AuthModule {}

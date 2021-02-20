@@ -1,15 +1,13 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcrypt'
 import { User } from 'src/users/user.entity'
 import { UsersService } from 'src/users/users.service'
-import { PasswordRepository } from './password.repository'
+import { PasswordRepository } from '../password.repository'
 
 @Injectable()
-export class AuthService {
+export class LocalService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
     private readonly passwords: PasswordRepository,
   ) {}
 
@@ -48,13 +46,6 @@ export class AuthService {
     })
 
     return user
-  }
-
-  async makeToken(user: User): Promise<string> {
-    const payload = { sub: user.id }
-    const token = await this.jwtService.signAsync(payload)
-
-    return token
   }
 
   private async comparePasswords(password: string, user: User) {

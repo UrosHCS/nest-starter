@@ -1,4 +1,4 @@
-import { AuthService } from 'src/auth/auth.service'
+import { TokenService } from 'src/auth/services/token.service'
 import { after, before, ctx } from '../ctx'
 
 describe('Get logged in user', () => {
@@ -34,7 +34,7 @@ describe('Get logged in user', () => {
   it.each(cases)('declines malformed JWT', async (generateMalformedToken) => {
     const user = await ctx.createUser()
 
-    const token = await ctx.app.get(AuthService).makeToken(user)
+    const token = await ctx.app.get(TokenService).makeToken(user)
 
     const malformedToken = generateMalformedToken(token)
 

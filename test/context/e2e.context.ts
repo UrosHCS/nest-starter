@@ -1,7 +1,7 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { AppModule } from 'src/app.module'
-import { AuthService } from 'src/auth/auth.service'
 import { PasswordFactory } from 'src/auth/password.factory'
+import { TokenService } from 'src/auth/services/token.service'
 import { User } from 'src/users/user.entity'
 import { UserFactory } from 'src/users/user.factory'
 import { Request } from 'test/helpers/request'
@@ -46,7 +46,7 @@ export class E2EContext extends ExpressContext {
   async logIn(user?: User) {
     user = user || (await this.createUser())
 
-    const token = await this.app.get(AuthService).makeToken(user)
+    const token = await this.app.get(TokenService).makeToken(user)
 
     this.req.setHeader('Authorization', 'Bearer ' + token)
 
