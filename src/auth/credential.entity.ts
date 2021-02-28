@@ -1,12 +1,24 @@
 import { User } from 'src/users/user.entity'
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity('passwords')
-export class Password {
+export enum CredentialType {
+  password = 'password',
+  google = 'google',
+  facebook = 'facebook',
+}
+
+@Entity('credentials')
+export class Credential {
   @PrimaryGeneratedColumn()
   id: number
 
-  // The hashed password is stored in the "value" column
+  @Column({
+    type: 'varchar',
+    length: 255,
+  })
+  type: CredentialType
+
+  // The hashed password, google user id or facebook user id
   @Column({
     type: 'varchar',
     length: 255,

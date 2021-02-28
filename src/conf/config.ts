@@ -1,4 +1,4 @@
-import { Password } from 'src/auth/password.entity'
+import { Password } from 'src/auth/credential.entity'
 import { User } from 'src/users/user.entity'
 
 export default () => {

@@ -1,6 +1,6 @@
 import { ModuleMetadata } from '@nestjs/common/interfaces'
 import { AppModule } from 'src/app.module'
-import { PasswordFactory } from 'src/auth/password.factory'
+import { CredentialFactory } from 'src/auth/credential.factory'
 import { TokenService } from 'src/auth/services/token.service'
 import { User } from 'src/users/user.entity'
 import { UserFactory } from 'src/users/user.factory'
@@ -60,7 +60,7 @@ export class E2EContext extends ExpressContext {
   async createUser(): Promise<User> {
     const user = await new UserFactory().create()
 
-    await new PasswordFactory().create({ user })
+    await new CredentialFactory().create({ user })
 
     return user
   }

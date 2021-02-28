@@ -1,5 +1,5 @@
 import { compare } from 'bcrypt'
-import { Password } from 'src/auth/password.entity'
+import { Credential } from 'src/auth/credential.entity'
 import { Role, User } from 'src/users/user.entity'
 import { after, before, ctx } from '../ctx'
 
@@ -41,7 +41,7 @@ describe('Register', () => {
       .then(async () => {
         const user = await ctx.repo(User).findOneOrFail({ email })
         expect(user).toBeTruthy()
-        const userPassword = await ctx.repo(Password).findOneOrFail({ userId: user.id })
+        const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
         expect(userPassword.value).not.toEqual(password)
 
         const passwordsMatch = await compare('somePassword', userPassword.value)
@@ -80,7 +80,7 @@ describe('Register', () => {
       .then(async () => {
         const user = await ctx.repo(User).findOneOrFail({ email })
         expect(user).toBeTruthy()
-        const userPassword = await ctx.repo(Password).findOneOrFail({ userId: user.id })
+        const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
         expect(userPassword.value).not.toEqual(password)
 
         expect(await compare(trimmedPassword, userPassword.value)).toStrictEqual(false)

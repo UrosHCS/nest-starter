@@ -6,7 +6,7 @@ import { ConfService } from 'src/conf/conf.service'
 import { UsersModule } from 'src/users/users.module'
 import { GoogleController } from './controllers/google.controller'
 import { LocalController } from './controllers/local.controller'
-import { PasswordRepository } from './password.repository'
+import { CredentialRepository } from './credential.repository'
 import { GoogleService } from './services/google.service'
 import { LocalService } from './services/local.service'
 import { TokenService } from './services/token.service'
@@ -15,7 +15,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PasswordRepository]),
+    TypeOrmModule.forFeature([CredentialRepository]),
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({

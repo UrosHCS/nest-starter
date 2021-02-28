@@ -2,13 +2,14 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { compare, hash } from 'bcrypt'
 import { User } from 'src/users/user.entity'
 import { UsersService } from 'src/users/users.service'
-import { PasswordRepository } from '../password.repository'
+import { CredentialType } from '../credential.entity'
+import { CredentialService } from './credential.service'
 
 @Injectable()
 export class LocalService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly passwords: PasswordRepository,
+    private readonly credentialService: CredentialService,
   ) {}
 
   async findAndValidateUser(email: string, password: string): Promise<User> {
@@ -18,7 +19,15 @@ export class LocalService {
       throw new UnauthorizedException('We could not find this email address.')
     }
 
-    const passwordsMatch = await this.comparePasswords(password, user)
+    const credential = await this.credentialService.findOneOrFail(user.id)
+
+    if (credential.type !== CredentialType.password) {
+      throw new UnauthorizedException(
+        `This account is not a local account, it is a ${credential.type} account.`,
+      )
+    }
+
+    const passwordsMatch = await this.comparePasswords(password, credential.value)
 
     if (!passwordsMatch) {
       throw new UnauthorizedException('Wrong password')
@@ -28,6 +37,8 @@ export class LocalService {
   }
 
   async registerUser(email: string, password: string): Promise<User> {
+    // TODO: check if email already exists
+
     if (email === password) {
       throw new BadRequestException('Password cannot be same as email.')
     }
@@ -40,7 +51,7 @@ export class LocalService {
       email,
     })
 
-    await this.passwords.save({
+    this.credentialService.createPassword({
       userId: user.id,
       value: await this.hashPassword(password),
     })
@@ -48,12 +59,8 @@ export class LocalService {
     return user
   }
 
-  private async comparePasswords(password: string, user: User) {
-    const userPassword = await this.passwords.findOneOrFail({
-      userId: user.id,
-    })
-
-    return await compare(password, userPassword.value)
+  private async comparePasswords(first: string, second: string) {
+    return await compare(first, second)
   }
 
   private async hashPassword(password: string) {
