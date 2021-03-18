@@ -26,6 +26,7 @@ TODO:
 - Set up mail,
 - Set up image upload,
 - Set up auth with google and facebook,
+- Split config per module,
 
 ## Set up
 

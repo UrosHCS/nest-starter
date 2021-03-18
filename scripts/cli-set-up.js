@@ -36,9 +36,9 @@ module.exports = NestFactory.create(AppModule)
       registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
     }
 
-    const { factory } = require('../dist/src/shared/factories/factory')
+    // const { factory } = require('../dist/src/shared/factories/factory')
 
-    registerGlobal('factory', factory, 'function for making entities')
+    // registerGlobal('factory', factory, 'function for making entities')
 
     registerGlobal('globals', registeredGlobalVariables, 'list of registered global variables')
 

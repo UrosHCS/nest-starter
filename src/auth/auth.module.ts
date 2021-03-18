@@ -7,6 +7,7 @@ import { UsersModule } from 'src/users/users.module'
 import { GoogleController } from './controllers/google.controller'
 import { LocalController } from './controllers/local.controller'
 import { CredentialRepository } from './credential.repository'
+import { CredentialService } from './services/credential.service'
 import { GoogleService } from './services/google.service'
 import { LocalService } from './services/local.service'
 import { TokenService } from './services/token.service'
@@ -24,7 +25,14 @@ import { JwtStrategy } from './strategies/jwt.strategy'
       useFactory: (conf: ConfService) => conf.jwt,
     }),
   ],
-  providers: [GoogleService, LocalService, TokenService, JwtStrategy, GoogleStrategy],
+  providers: [
+    CredentialService,
+    GoogleService,
+    LocalService,
+    TokenService,
+    JwtStrategy,
+    GoogleStrategy,
+  ],
   controllers: [LocalController, GoogleController],
 })
 export class AuthModule {}
