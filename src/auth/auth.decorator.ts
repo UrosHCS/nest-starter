@@ -1,6 +1,6 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { Role } from 'src/users/user.entity'
+import { Role } from 'src/user/user.entity'
 import { RolesGuard } from './roles.guard'
 
 export function Auth(...roles: Array<keyof typeof Role>) {

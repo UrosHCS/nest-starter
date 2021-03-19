@@ -17,7 +17,6 @@ export const appSetup = (app: INestApplication) => {
     new ValidationPipe({
       // When whitelist is true, validation pipe will remove all
       // properties that are not in the type-hinted dto.
-      // TODO: make sure the above is true.
       whitelist: true,
       // This option will tell the pipe to transform payloads
       // to be objects typed according to their DTO classes.

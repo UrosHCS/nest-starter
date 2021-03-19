@@ -1,10 +1,10 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { Request } from 'express'
-import { ProfileBody } from 'src/auth/strategies/google.strategy'
 import { Transformer } from 'src/shared/response/transformer'
-import { UserTransformer } from 'src/users/transformers/user.transformer'
-import { User } from 'src/users/user.entity'
+import { UserTransformer } from 'src/user/transformers/user.transformer'
+import { User } from 'src/user/user.entity'
+import { OauthUser } from '../interfaces/oauth.user'
 import { GoogleService } from '../services/google.service'
 import { TokenService } from '../services/token.service'
 
@@ -25,7 +25,7 @@ export class GoogleController {
   @Get('login')
   @UseGuards(AuthGuard('google'))
   async logIn(@Req() req: Request) {
-    const user = await this.googleService.findAndValidateUser(req.user as ProfileBody)
+    const user = await this.googleService.findAndValidateUser(req.user as OauthUser)
 
     return this.logInResponse(user)
   }
@@ -33,7 +33,7 @@ export class GoogleController {
   @Get('register')
   @UseGuards(AuthGuard('google'))
   async register(@Req() req: Request) {
-    const user = await this.googleService.registerUser(req.user as ProfileBody)
+    const user = await this.googleService.registerUser(req.user as OauthUser)
 
     return this.logInResponse(user)
   }

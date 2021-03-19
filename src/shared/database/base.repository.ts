@@ -1,5 +1,5 @@
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { Paginator } from './paginator';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
+import { Paginator } from './paginator'
 
 export interface PaginateOptions<E> extends FindOneOptions<E> {
   page?: number
@@ -7,6 +7,9 @@ export interface PaginateOptions<E> extends FindOneOptions<E> {
 }
 
 export abstract class BaseRepository<E> extends Repository<E> {
+  protected DEFAULT_PAGE = 1
+  protected DEFAULT_LIMIT = 10
+
   // Here we can add methods that will be usable in every repository.
   // Just make sure that every new repository extends this class.
 
@@ -18,8 +21,8 @@ export abstract class BaseRepository<E> extends Repository<E> {
   async paginate(paginationOptions: PaginateOptions<E>): Promise<Paginator<E>> {
     let { page, limit, ...options } = paginationOptions
 
-    page = page || 1
-    limit = limit || 10
+    page = page || this.DEFAULT_PAGE
+    limit = limit || this.DEFAULT_LIMIT
     ;(options as FindManyOptions).take = limit
     ;(options as FindManyOptions).skip = (page - 1) * limit
 

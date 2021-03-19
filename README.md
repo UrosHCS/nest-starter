@@ -11,7 +11,7 @@ This repository was inspired by the amazing [Laravel](https://laravel.com/) fram
 - Authentication endpoints ready (/login, /register, /me),
 - Basic pagination functionality,
 - Separate database setup for dev/prod and tests,
-- Extended NestJS ConfigModule for easier use,
+- Separate configuration per module,
 - Validation setup done for validating requests,
 - Implemented trim strings functionality (not mandatory for a backend API),
 - E2E tests setup done that include hitting the sqlite database,
@@ -26,7 +26,6 @@ TODO:
 - Set up mail,
 - Set up image upload,
 - Set up auth with google and facebook,
-- Split config per module,
 
 ## Set up
 

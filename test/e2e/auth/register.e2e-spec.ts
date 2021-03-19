@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt'
 import { Credential } from 'src/auth/credential.entity'
-import { Role, User } from 'src/users/user.entity'
+import { Role, User } from 'src/user/user.entity'
 import { after, before, ctx } from '../ctx'
 
 describe('Register', () => {
@@ -40,7 +40,7 @@ describe('Register', () => {
       .expect(201)
       .then(async () => {
         const user = await ctx.repo(User).findOneOrFail({ email })
-        expect(user).toBeTruthy()
+        expect(user.id).toBeTruthy()
         const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
         expect(userPassword.value).not.toEqual(password)
 
@@ -77,6 +77,9 @@ describe('Register', () => {
         password,
       })
       .expect(201)
+      .expect((res) => {
+        expect(res.body.data).toHaveProperty('user.email', email)
+      })
       .then(async () => {
         const user = await ctx.repo(User).findOneOrFail({ email })
         expect(user).toBeTruthy()

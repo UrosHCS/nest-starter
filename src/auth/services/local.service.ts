@@ -1,19 +1,19 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
 import { compare, hash } from 'bcrypt'
-import { User } from 'src/users/user.entity'
-import { UsersService } from 'src/users/users.service'
+import { User } from 'src/user/user.entity'
+import { UserService } from 'src/user/user.service'
 import { CredentialType } from '../credential.entity'
 import { CredentialService } from './credential.service'
 
 @Injectable()
 export class LocalService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
     private readonly credentialService: CredentialService,
   ) {}
 
   async findAndValidateUser(email: string, password: string): Promise<User> {
-    const user = await this.usersService.findOne({ email })
+    const user = await this.userService.findOne({ email })
 
     if (!user) {
       throw new UnauthorizedException('We could not find this email address.')
@@ -21,7 +21,7 @@ export class LocalService {
 
     const credential = await this.credentialService.findOneOrFail(user.id)
 
-    if (credential.type !== CredentialType.password) {
+    if (credential.type !== CredentialType.local) {
       throw new UnauthorizedException(
         `This account is not a local account, it is a ${credential.type} account.`,
       )
@@ -47,11 +47,11 @@ export class LocalService {
       throw new BadRequestException(`Password ${password} can't be used because it is too common.`)
     }
 
-    const user = await this.usersService.create({
+    const user = await this.userService.create({
       email,
     })
 
-    this.credentialService.createPassword({
+    await this.credentialService.createPassword({
       userId: user.id,
       value: await this.hashPassword(password),
     })
@@ -70,7 +70,7 @@ export class LocalService {
   }
 
   findUserById(id: number) {
-    return this.usersService.findOne({ id })
+    return this.userService.findOne({ id })
   }
 
   private validatePassword(password: string): boolean {

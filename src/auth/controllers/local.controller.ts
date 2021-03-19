@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, Post, Req } from '@nestjs/common'
 import { Transformer } from 'src/shared/response/transformer'
-import { UserTransformer } from 'src/users/transformers/user.transformer'
-import { User } from 'src/users/user.entity'
-import { UsersService } from 'src/users/users.service'
+import { UserTransformer } from 'src/user/transformers/user.transformer'
+import { User } from 'src/user/user.entity'
+import { UserService } from 'src/user/user.service'
 import { Auth } from '../auth.decorator'
 import { LoginDto } from '../dto/login.dto'
 import { RegisterDto } from '../dto/register.dto'
@@ -14,7 +14,7 @@ export class LocalController {
   constructor(
     private readonly localService: LocalService,
     private readonly tokenService: TokenService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
   ) {}
 
   @Post('login')

@@ -1,8 +1,8 @@
-import { User } from 'src/users/user.entity'
+import { User } from 'src/user/user.entity'
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 
 export enum CredentialType {
-  password = 'password',
+  local = 'local', // password
   google = 'google',
   facebook = 'facebook',
 }

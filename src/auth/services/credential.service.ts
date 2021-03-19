@@ -16,7 +16,7 @@ export class CredentialService {
   }
 
   createPassword(attributes: Fillable) {
-    return this.create(attributes, CredentialType.password)
+    return this.create(attributes, CredentialType.local)
   }
 
   createGoogle(attributes: Fillable) {
@@ -28,6 +28,6 @@ export class CredentialService {
   }
 
   private create(attributes: Fillable, type: CredentialType) {
-    return this.credentials.create({ ...attributes, type })
+    return this.credentials.save({ ...attributes, type })
   }
 }

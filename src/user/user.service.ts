@@ -1,30 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { Paginator } from 'src/shared/database/paginator'
-import { Role, User } from 'src/users/user.entity'
-import { UserRepository } from 'src/users/user.repository'
+import { Role, User } from 'src/user/user.entity'
+import { UserRepository } from 'src/user/user.repository'
 import { FindConditions } from 'typeorm'
-import { UsersFilter } from './users.dto'
+import { UserFilter } from './user.filter.dto'
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly repo: UserRepository) {}
 
-  paginate(filter: UsersFilter): Promise<Paginator<User>> {
-    const orderColumn = filter.order ? filter.order.toLowerCase() : 'id'
-    const direction = filter.direction ? filter.direction.toUpperCase() : 'ASC'
-
+  paginate(filter: UserFilter): Promise<Paginator<User>> {
     return this.repo.paginate({
       limit: filter.limit,
       page: filter.page,
       order: {
-        [orderColumn]: direction,
+        [filter.order]: filter.direction.toUpperCase(),
       },
-    })
-  }
-
-  all() {
-    return this.repo.find({
-      relations: ['posts'],
     })
   }
 

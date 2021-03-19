@@ -1,5 +1,5 @@
-import { User } from 'src/users/user.entity'
-import { UserFactory } from 'src/users/user.factory'
+import { User } from 'src/user/user.entity'
+import { UserFactory } from 'src/user/user.factory'
 import { after, before, ctx } from '../ctx'
 
 describe('users index', () => {

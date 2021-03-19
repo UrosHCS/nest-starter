@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from 'src/auth/auth.module'
 import { SharedModule } from 'src/shared/shared.module'
-import { UsersModule } from 'src/users/users.module'
+import { UserModule } from 'src/user/user.module'
 import { AppController } from './app.controller'
 import config from './config'
 
@@ -23,7 +23,7 @@ import config from './config'
     // Other modules
     SharedModule,
     AuthModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
 })

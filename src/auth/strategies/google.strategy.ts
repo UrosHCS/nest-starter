@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-google-oauth20'
+import { OauthUser } from '../interfaces/oauth.user'
 
 export interface Profile {
   id: string
@@ -25,17 +26,20 @@ export interface Profile {
   }
 }
 
-export type ProfileBody = Profile['_json']
-
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(configService: ConfigService) {
     super(configService.get('google'))
   }
 
-  validate(accessToken: string, refreshToken: string, profile: Profile): ProfileBody {
+  validate(accessToken: string, refreshToken: string, profile: Profile): OauthUser {
     // return accessToken also if you want to use it to make requests
     // to google API about the logged in user
-    return profile._json
+    return {
+      id: profile.id,
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      photo: profile.photos[0].value,
+    }
   }
 }

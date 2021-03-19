@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UsersModule } from 'src/users/users.module'
+import { UserModule } from 'src/user/user.module'
 import config from './config'
 import { GoogleController } from './controllers/google.controller'
 import { LocalController } from './controllers/local.controller'
@@ -19,7 +19,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
   imports: [
     ConfigModule.forFeature(config),
     TypeOrmModule.forFeature([CredentialRepository]),
-    UsersModule,
+    UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

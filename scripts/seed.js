@@ -3,8 +3,7 @@
 
 const { Role, User } = require('../dist/src/users/user.entity')
 const { UserFactory } = require('../dist/src/users/user.factory')
-const { Password } = require('../dist/src/auth/password.entity')
-const { PasswordFactory } = require('../dist/src/auth/password.factory')
+const { CredentialFactory } = require('../dist/src/auth/credential.factory')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
 
 require('./cli-set-up').then(async () => {
@@ -13,37 +12,38 @@ require('./cli-set-up').then(async () => {
     id: MoreThanOrEqual(1)
   })
 
-  let user = await new UserFactory.create({
+  let user = await new UserFactory().create({
     name: 'admin',
     email: 'admin@example.com',
     role: Role.admin,
   })
 
-  await new PasswordFactory.create({ user })
+  await new CredentialFactory().create({ user })
 
-  user = await new UserFactory.create({
+  user = await new UserFactory().create({
     name: 'client',
     email: 'client@example.com',
     role: Role.client,
   })
 
-  await new PasswordFactory.create({ user })
+  await new CredentialFactory().create({ user })
 
-  user = await new UserFactory.create({
+  user = await new UserFactory().create({
     name: 'john',
     email: 'john@example.com',
     role: Role.client,
   })
 
-  await new PasswordFactory.create({ user })
+  await new CredentialFactory().create({ user })
 
 }).then(() => {
 
-  console.log('done')
   getConnection().close()
+  console.log('done')
 
 }).catch(reason => {
 
+  getConnection().close()
   console.log(reason)
 
 })

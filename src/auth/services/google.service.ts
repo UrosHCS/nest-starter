@@ -1,19 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { User } from 'src/users/user.entity'
-import { UsersService } from 'src/users/users.service'
+import { User } from 'src/user/user.entity'
+import { UserService } from 'src/user/user.service'
 import { CredentialType } from '../credential.entity'
-import { ProfileBody } from '../strategies/google.strategy'
+import { OauthUser } from '../interfaces/oauth.user'
 import { CredentialService } from './credential.service'
 
 @Injectable()
 export class GoogleService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
     private readonly credentialService: CredentialService,
   ) {}
 
-  async findAndValidateUser(body: ProfileBody): Promise<User> {
-    const user = await this.usersService.findOne({ email: body.email })
+  async findAndValidateUser(googleUser: OauthUser): Promise<User> {
+    const user = await this.usersService.findOne({ email: googleUser.email })
 
     if (!user) {
       throw new UnauthorizedException('We could not find this email address.')
@@ -27,7 +27,7 @@ export class GoogleService {
       )
     }
 
-    if (credential.value !== body.sub) {
+    if (credential.value !== googleUser.id) {
       throw new UnauthorizedException(
         'Your google account does not match with the google account you are registered with, even though the email address is the same',
       )
@@ -36,19 +36,19 @@ export class GoogleService {
     return user
   }
 
-  async registerUser(body: ProfileBody): Promise<User> {
+  async registerUser(googleUser: OauthUser): Promise<User> {
     // TODO: check if email already exists
 
     const user = await this.usersService.create({
-      email: body.email,
-      name: body.name,
+      email: googleUser.email,
+      name: googleUser.name,
     })
 
     // TODO: handle picture
 
     this.credentialService.createGoogle({
       userId: user.id,
-      value: body.sub,
+      value: googleUser.id,
     })
 
     return user
