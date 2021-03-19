@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfService } from 'src/conf/conf.service'
 import { UsersModule } from 'src/users/users.module'
+import config from './config'
 import { GoogleController } from './controllers/google.controller'
 import { LocalController } from './controllers/local.controller'
 import { CredentialRepository } from './credential.repository'
@@ -16,13 +17,14 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
   imports: [
+    ConfigModule.forFeature(config),
     TypeOrmModule.forFeature([CredentialRepository]),
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      // ConfModule is global so no need to import it
-      inject: [ConfService],
-      useFactory: (conf: ConfService) => conf.jwt,
+      imports: [ConfigModule],
+      useFactory: (conf: ConfigService) => conf.get('jwt')!,
+      inject: [ConfigService],
     }),
   ],
   providers: [

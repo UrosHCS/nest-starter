@@ -3,7 +3,7 @@ import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express
 import { AppModule } from 'src/app.module'
 import { getMetadataArgsStorage } from 'typeorm'
 
-async function pinker(app: NestExpressApplication) {
+async function ard(app: NestExpressApplication) {
   let registeredGlobalVariables = {}
 
   function registerGlobal(key: string, value: any, description: string = '?') {
@@ -28,7 +28,7 @@ async function pinker(app: NestExpressApplication) {
 
   registerGlobal('globals', registeredGlobalVariables, 'list of registered global variables')
 
-  console.log('\nWelcome to pinker! Here are all the registered global variables:')
+  console.log('\nWelcome to ard! Here are all the registered global variables:')
   console.log(registeredGlobalVariables)
 }
 
@@ -37,7 +37,7 @@ async function bootstrap(): Promise<NestExpressApplication> {
 }
 
 bootstrap()
-  .then(pinker)
+  .then(ard)
   .catch((reason) => {
     console.log(reason)
   })

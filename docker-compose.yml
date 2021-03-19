@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  nest-app:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-app
+    container_name: app
     user: "node"
     depends_on:
-      - nest-mysql
+      - mysql
     working_dir: /app
     volumes:
       - ./:/app
@@ -24,9 +24,9 @@ services:
       - nest_network
     command: npm run start:debug-remote
 
-  nest-mysql:
+  mysql:
     image: mysql/mysql-server:5.7
-    container_name: nest-mysql
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: nest

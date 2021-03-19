@@ -1,7 +1,7 @@
 import { BadRequestException, INestApplication, ValidationPipe } from '@nestjs/common'
 import { WsAdapter } from '@nestjs/platform-ws'
 import { useContainer } from 'class-validator'
-import { AppModule } from './app.module'
+import { AppModule } from './app/app.module'
 
 // If you need to you can set nest as a container for typeorm also
 // import { useContainer as containerForTypeorm } from 'typeorm'

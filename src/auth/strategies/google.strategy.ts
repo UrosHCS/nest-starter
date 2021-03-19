@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-google-oauth20'
-import { ConfService } from 'src/conf/conf.service'
 
 export interface Profile {
   id: string
@@ -29,8 +29,8 @@ export type ProfileBody = Profile['_json']
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(conf: ConfService) {
-    super(conf.google)
+  constructor(configService: ConfigService) {
+    super(configService.get('google'))
   }
 
   validate(accessToken: string, refreshToken: string, profile: Profile): ProfileBody {

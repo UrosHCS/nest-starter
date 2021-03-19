@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
 import { appSetup } from './app-setup'
-import { AppModule } from './app.module'
+import { AppModule } from './app/app.module'
 
 // Enables passing the port and host thu env variables
 const port = Number(process.env.NODE_PORT) || 3000

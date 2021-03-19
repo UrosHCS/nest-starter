@@ -1,5 +1,8 @@
 enter-mysql:
-	docker exec -it nest-mysql mysql -u root -proot nest
+	docker exec -it mysql mysql -u root -proot nest
 
 enter-app:
-	docker exec -it nest-app bash
+	docker exec -it app bash
+
+ard:
+	docker exec -it app npm run ard

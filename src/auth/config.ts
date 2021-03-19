@@ -1,4 +1,4 @@
-export default {
+export default () => ({
   /**
    * Json Web Token settings
    */
@@ -18,4 +18,9 @@ export default {
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
     scope: ['email', 'profile'],
   },
-}
+
+  /**
+   * Facebook auth settings
+   */
+  facebook: {},
+})
