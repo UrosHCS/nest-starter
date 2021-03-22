@@ -21,7 +21,6 @@ const config = {
   synchronize: false,
   logging: false,
   entities: ['src/**/*entity.ts'],
-  migrations: ['src/**/*migration.ts'],
 }
 
 // Here you can console log config to make sure the env variables are ok

@@ -30,4 +30,8 @@ export class UserService {
   create(attributes: { name?: string; email: string; role?: Role }) {
     return this.repo.save(attributes)
   }
+
+  delete(id: number) {
+    return this.repo.delete(id)
+  }
 }

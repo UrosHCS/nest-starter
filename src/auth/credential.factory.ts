@@ -6,7 +6,7 @@ import { Credential, CredentialType } from './credential.entity'
 export class CredentialFactory extends BaseFactory<Credential> {
   protected entityClass = Credential
 
-  public async definition(): Promise<Attributes<Credential>> {
+  async definition(): Promise<Attributes<Credential>> {
     return {
       type: CredentialType.local,
       value: await hash('password', 10),

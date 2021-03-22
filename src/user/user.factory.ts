@@ -4,7 +4,7 @@ import { Role, User } from './user.entity'
 export class UserFactory extends BaseFactory<User> {
   protected entityClass = User
 
-  public definition() {
+  definition() {
     return {
       name: this.faker.internet.userName(),
       email: this.faker.internet.email(),

@@ -22,10 +22,14 @@ Some smaller features also, check out the `shared` module.
 TODO:
 
 - Write a seeding package,
-- Set up websocket,
-- Set up mail,
-- Set up image upload,
-- Set up auth with google and facebook,
+- Set up cache,
+-        websocket,
+-        mail,
+-        image upload,
+-        auth with google and facebook,
+-        queue,
+-        translation,
+-        swagger,
 
 ## Set up
 

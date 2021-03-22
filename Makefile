@@ -6,3 +6,6 @@ enter-app:
 
 ard:
 	docker exec -it app npm run ard
+
+jest:
+	docker exec -it app npm run test

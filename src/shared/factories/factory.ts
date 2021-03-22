@@ -18,7 +18,7 @@ type Attribute<E, P extends keyof E> = E[P] extends NestedFactoryNotAvailable
 // relations are also of object type.
 type ColumnAttribute = string | number | boolean | bigint | Date | null | undefined
 
-// Factories can be nested only for @ManyToOne relations and also only one side of a @OneToOne relation.
+// Factories can be nested for @ManyToOne relations and one side of a @OneToOne relation.
 // We can filter other relations by not allowing factories for columns of type Array. The one side of
 // a @OneToOne that can't have a nested factory is not filtered out - keep this in mind.
 type NestedFactoryNotAvailable = ColumnAttribute | any[]
@@ -122,5 +122,5 @@ export abstract class BaseFactory<E> implements FactoryInterface<E> {
     return Promise.all(entities)
   }
 
-  public abstract definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>
+  abstract definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>
 }

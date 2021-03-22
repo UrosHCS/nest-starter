@@ -15,6 +15,9 @@
     // outDir is mandatory so that tsc compiles everything to dist folder
     "outDir": "./dist",
     "baseUrl": "./",
+    // "paths": {
+    //   "src/*": ["./src/*"]
+    // },
     "incremental": true,
     "strictNullChecks": true,
     // "types": ["node", "jest"],
