@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
 import { appSetup } from './app-setup'
 import { AppModule } from './app/app.module'
+import { openApi } from './open.api'
 
 // Enables passing the port and host thu env variables
 const port = Number(process.env.NODE_PORT) || 3000
@@ -14,6 +15,8 @@ async function bootstrap() {
 
   // We do the same setup here and in tests
   appSetup(app)
+
+  openApi(app)
 
   app.enableCors()
 
