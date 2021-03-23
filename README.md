@@ -23,13 +23,13 @@ TODO:
 
 - Write a seeding package,
 - Set up cache,
--        websocket,
--        mail,
--        image upload,
--        auth with google and facebook,
--        queue,
--        translation,
--        swagger,
+- Set up websocket,
+- Set up mail,
+- Set up image upload,
+- Set up auth with google and facebook,
+- Set up queue,
+- Set up translation,
+- Set up swagger,
 
 ## Set up
 
