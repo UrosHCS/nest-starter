@@ -37,7 +37,7 @@ export class LocalService {
   }
 
   async registerUser(email: string, password: string): Promise<User> {
-    // TODO: check if email already exists
+    // Existence of a user with the same email is done in dto
 
     if (email === password) {
       throw new BadRequestException('Password cannot be same as email.')

@@ -1,8 +1,8 @@
 // TODO: make a cool seeding package instead of this
 'use strict'
 
-const { Role, User } = require('../dist/src/users/user.entity')
-const { UserFactory } = require('../dist/src/users/user.factory')
+const { Role, User } = require('../dist/src/user/user.entity')
+const { UserFactory } = require('../dist/src/user/user.factory')
 const { CredentialFactory } = require('../dist/src/auth/credential.factory')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
 

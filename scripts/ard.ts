@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
-import { AppModule } from 'src/app.module'
+import { AppModule } from 'src/app/app.module'
 import { getMetadataArgsStorage } from 'typeorm'
 
 async function ard(app: NestExpressApplication) {

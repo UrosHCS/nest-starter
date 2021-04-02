@@ -13,7 +13,6 @@ export class User {
   @Column({
     type: 'varchar',
     length: 255,
-    unique: true,
     nullable: true,
   })
   name: string | null

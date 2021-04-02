@@ -1,3 +1,4 @@
+import { getConnection } from 'typeorm'
 import { Column } from './column'
 import { FieldRelation, NoArgConstructor } from './seed'
 
@@ -16,5 +17,11 @@ export class Relation<E> extends Column {
 
   private getValueField(): keyof E {
     return this.relation.valueField
+  }
+
+  getPlaceholder(): string {
+    const table = getConnection().getMetadata(this.getEntity()).tableName
+
+    return `SELECT ${this.getValueField()} FROM ${table} WHERE ${this.getDisplayField()} = ?`
   }
 }

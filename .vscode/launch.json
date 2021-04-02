@@ -26,8 +26,7 @@
             "remoteRoot": "/app",
             "protocol": "inspector",
             "skipFiles": [
-                "<node_internals>/**",
-                "node_modules/**"
+                "<node_internals>/**"
             ],
         },
         {

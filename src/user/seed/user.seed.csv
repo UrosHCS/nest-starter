@@ -1,0 +1,7 @@
+id,name,email,role
+1,Steven Strange,steven.strange@example.com,admin
+2,Thor Odinson,thor.odinson@example.com,client
+3,Natasha Romanoff,natasha.romanoff@example.com,client
+4,Tony Stark,tony.stark@example.com,admin
+5,Peter Parker,peter.parker@example.com,client
+6,Steve Rogers,steve.rogers@example.com,client

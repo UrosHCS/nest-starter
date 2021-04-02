@@ -1,6 +1,8 @@
 import { Column } from './column'
+import { Query } from './query'
+import { Reader } from './reader'
 import { Relation } from './relation'
-import { Resolver } from './resolver'
+import { Resolver, ResolverFunction } from './resolver'
 
 export interface NoArgConstructor<Class> {
   new (): Class
@@ -15,8 +17,6 @@ export type FieldRelation<E> = {
   valueField: keyof E
 }
 
-type ResolverFunction = Function
-
 export interface FieldOptions<E> {
   /**
    * Name of the field in the database (use if csv and database columns are different)
@@ -29,13 +29,15 @@ export interface FieldOptions<E> {
   /**
    * Function which creates a custom resolver for the field
    */
-  resolver?: ResolverFunction
+  resolver?: ResolverFunction<E>
 }
 
 export abstract class Seed<E> {
   protected abstract entityClass: NoArgConstructor<E>
 
-  abstract definition(): Column[]
+  protected abstract filePath: string
+
+  abstract definition(): object
 
   /**
    * @param {string} name Name of the column in the csv file
@@ -63,9 +65,15 @@ export abstract class Seed<E> {
 
   protected resolver<R>(
     name: string,
-    resolver: ResolverFunction,
+    resolver: ResolverFunction<R>,
     relation?: FieldRelation<R>,
   ): Resolver<R> {
-    return new Resolver(name, resolver, relation)
+    return new Resolver<R>(name, resolver, relation)
+  }
+
+  async run(): Promise<void> {
+    const columns = this.definition()
+
+    await new Reader(this.filePath, columns, new Query(this.entityClass, columns)).read()
   }
 }

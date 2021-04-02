@@ -8,4 +8,8 @@ export class Column {
   getName(): string {
     return this.name
   }
+
+  getPlaceholder(): string {
+    return '?'
+  }
 }
