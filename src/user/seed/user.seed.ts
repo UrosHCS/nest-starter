@@ -4,7 +4,7 @@ import { User } from 'src/user/user.entity'
 export class UserSeed extends Seed<User> {
   protected entityClass = User
 
-  protected filePath = __dirname + '/user.seed.csv'
+  protected filePath = 'src/user/seed/user.seed.csv'
 
   definition() {
     return {

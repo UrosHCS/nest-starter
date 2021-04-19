@@ -16,17 +16,17 @@ require('./cli-set-up').then(async () => {
     id: MoreThanOrEqual(1)
   })
 
-  new UserSeed().run()
-  new CredentialSeed().run()
+  await (new UserSeed().run())
+  await (new CredentialSeed().run())
 
-}).then(() => {
+}).then(async () => {
 
-  getConnection().close()
+  await getConnection().close()
   console.log('done')
 
-}).catch(reason => {
+}).catch(async reason => {
 
-  getConnection().close()
+  await getConnection().close()
   console.log(reason)
 
 })

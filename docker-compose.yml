@@ -32,8 +32,8 @@ services:
       MYSQL_USER: nest
       MYSQL_PASSWORD: secret
       MYSQL_DATABASE: nest
-    # ports:
-    #   - "33060:3306"
+    ports:
+      - "33060:3306"
     expose:
       - "3306"
     volumes:

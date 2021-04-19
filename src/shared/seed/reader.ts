@@ -1,10 +1,10 @@
-import { parseFile } from '@fast-csv/parse'
+import * as parse from 'csv-parse'
 import * as fs from 'fs'
-import { finished as originalFinished } from 'stream'
-import { promisify } from 'util'
+// import { finished as originalFinished } from 'stream'
+// import { promisify } from 'util'
 import { SeedException } from './seed.exception'
 
-const finished = promisify(originalFinished)
+// const finished = promisify(originalFinished)
 
 const BUFFER_LENGTH = 3
 
@@ -28,13 +28,22 @@ export class Reader {
       throw new SeedException(`File ${this.path} does not exist.`)
     }
 
-    const stream = parseFile(this.path)
-      .on('headers', (headers) => this.onHeaders(headers))
-      .on('error', (error) => this.onError(error))
-      .on('data', (data) => this.onData(data))
-      .on('end', (rowCount: number) => this.onEnd(rowCount))
+    const parser = fs
+      .createReadStream(this.path)
+      .pipe(parse({
+        bom: true,
+        columns: Object.keys(this.columns),
+        from: 2,
+      }));
 
-    await finished(stream)
+    try {
+      for await (const record of parser) {
+        // Work with each record
+        this.onData(record)
+      }
+    } catch (error: unknown) {
+      this.onError(error)
+    }
   }
 
   onHeaders(headers: string[]) {

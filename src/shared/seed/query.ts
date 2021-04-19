@@ -1,12 +1,12 @@
-import { getConnection, getManager } from 'typeorm'
+import { getConnection } from 'typeorm'
 
 export class Query {
   constructor(private entityClass: Function, private columns: object) {}
 
   handle(rows: object[]) {
     const columns = this.columns
-    const manager = getManager()
     const connection = getConnection()
+    const manager = connection.manager
 
     const table = connection.getMetadata(this.entityClass).tableName
 
@@ -15,6 +15,8 @@ export class Query {
     const placeholderRows: string[] = []
 
     const parameters: Array<string | number | boolean | null> = []
+    // console.log(rows)
+    // console.log(columns)
 
     for (const row of rows) {
       const placeholderColumns: any[] = []
@@ -29,12 +31,12 @@ export class Query {
       placeholderRows.push(placeholderColumns.join(', '))
     }
 
-    const values = placeholderRows.join(', ')
+    const values = '(' + placeholderRows.join('),\n(') + ')'
 
-    const sql = `INSERT INTO ${table} (${columnNames}) VALUES ${values}`
-
-    // const result = manager.query(sql, parameters)
+    const sql = `INSERT INTO ${table}\n(${columnNames})\nVALUES\n${values}`
 
     console.log(sql, parameters)
+
+    const result = manager.query(sql, parameters)
   }
 }

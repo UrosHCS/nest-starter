@@ -5,15 +5,15 @@ import { User } from 'src/user/user.entity'
 export class CredentialSeed extends Seed<Credential> {
   protected entityClass = Credential
 
-  protected filePath = __dirname + '/credential.seed.csv'
+  protected filePath = 'src/auth/seed/credential.seed.csv'
 
   definition() {
-    return [
+    return {
       // Fields
-      this.field('id'),
-      this.field('value'),
-      this.field('type'),
-      this.field('user', {
+      id: this.field('id'),
+      value: this.field('value'),
+      type: this.field('type'),
+      userId: this.field('user', {
         databaseField: 'userId',
         relation: {
           entityClass: User,
@@ -21,6 +21,6 @@ export class CredentialSeed extends Seed<Credential> {
           valueField: 'id',
         },
       }),
-    ]
+    }
   }
 }

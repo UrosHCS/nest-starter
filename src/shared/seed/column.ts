@@ -9,7 +9,7 @@ export class Column {
     return this.name
   }
 
-  getPlaceholder(): string {
+  getPlaceholder(): string | Promise<string> {
     return '?'
   }
 }
