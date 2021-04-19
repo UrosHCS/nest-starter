@@ -3,7 +3,7 @@ import { getConnection } from 'typeorm'
 export class Query {
   constructor(private entityClass: Function, private columns: object) {}
 
-  handle(rows: object[]) {
+  async handle(rows: object[]) {
     const columns = this.columns
     const connection = getConnection()
     const manager = connection.manager
@@ -37,6 +37,6 @@ export class Query {
 
     console.log(sql, parameters)
 
-    const result = manager.query(sql, parameters)
+    const result = await manager.query(sql, parameters)
   }
 }

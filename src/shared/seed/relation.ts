@@ -22,6 +22,6 @@ export class Relation<E> extends Column {
   getPlaceholder(): string {
     const table = getConnection().getMetadata(this.getEntity()).tableName
 
-    return `SELECT ${this.getValueField()} FROM ${table} WHERE ${this.getDisplayField()} = ?`
+    return `(SELECT ${this.getValueField()} FROM ${table} WHERE ${this.getDisplayField()} = ?)`
   }
 }

@@ -39,7 +39,7 @@ export class Reader {
     try {
       for await (const record of parser) {
         // Work with each record
-        this.onData(record)
+        await this.onData(record)
       }
     } catch (error: unknown) {
       this.onError(error)
@@ -71,21 +71,21 @@ export class Reader {
     throw new SeedException('Parse error: ' + error)
   }
 
-  onData(data: object) {
+  async onData(data: object) {
     this.rows.push(data)
     this.bufferCount++
 
     if (this.bufferCount === BUFFER_LENGTH) {
-      this.processRows()
+      await this.processRows()
       this.resetRows()
     }
   }
 
-  processRows() {
+  async processRows() {
     // Here, this.rows has length of BUFFER_LENGTH
     // or potentially less if it is the end of the stream.
 
-    this.processor.handle(this.rows)
+    await this.processor.handle(this.rows)
   }
 
   resetRows() {
@@ -93,11 +93,11 @@ export class Reader {
     this.rows = []
   }
 
-  onEnd(rowCount: number) {
+  async onEnd(rowCount: number) {
     this.rowCount = rowCount
 
     if (this.rows.length) {
-      this.processRows()
+      await this.processRows()
     }
   }
 }
