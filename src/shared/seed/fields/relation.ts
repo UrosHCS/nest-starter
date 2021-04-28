@@ -1,6 +1,6 @@
 import { getConnection } from 'typeorm'
+import { FieldRelation, NoArgConstructor } from '../seed'
 import { Column } from './column'
-import { FieldRelation, NoArgConstructor } from './seed'
 
 export class Relation<E> extends Column {
   constructor(name: string, private relation: FieldRelation<E>) {

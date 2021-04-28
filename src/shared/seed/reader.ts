@@ -1,15 +1,11 @@
 import * as parse from 'csv-parse'
 import * as fs from 'fs'
-// import { finished as originalFinished } from 'stream'
-// import { promisify } from 'util'
-import { SeedException } from './seed.exception'
-
-// const finished = promisify(originalFinished)
+import { SeedException } from './exceptions/seed.exception'
 
 const BUFFER_LENGTH = 3
 
 interface Processor {
-  handle(rows: object[]): void
+  handle(rows: object[]): Promise<void>
 }
 
 export class Reader {
@@ -21,79 +17,96 @@ export class Reader {
 
   private headers: string[]
 
-  constructor(private path: string, private columns: object, private processor: Processor) {}
+  constructor(
+    /**
+     * Path to a csv file that should be read
+     */
+    private path: string,
+    /**
+     * Fields (headers) that should be extracted from the csv file
+     */
+    private fields: string[],
+    /**
+     * Object that does something with the data
+     * from the csv file as it comes in.
+     */
+    private processor: Processor
+  ) {}
 
   async read() {
     if (!fs.existsSync(this.path)) {
       throw new SeedException(`File ${this.path} does not exist.`)
     }
 
-    const parser = fs
-      .createReadStream(this.path)
-      .pipe(parse({
-        bom: true,
-        columns: Object.keys(this.columns),
-        from: 2,
-      }));
+    const csvStream = this.createCsvStream()
+
+    let rowCount = 0
 
     try {
-      for await (const record of parser) {
-        // Work with each record
-        await this.onData(record)
+      for await (const row of csvStream) {
+        rowCount++
+        await this.processRow(row)
       }
+
+      await this.onEnd(rowCount)
     } catch (error: unknown) {
-      this.onError(error)
+      this.handleError(error)
     }
   }
 
-  onHeaders(headers: string[]) {
-    if (!Array.isArray(headers)) {
-      throw new Error('Headers not parsed')
-    }
-
-    const expectedHeaders = Object.keys(this.columns)
-
-    if (headers.length !== expectedHeaders.length) {
-      throw new Error('Definition columns count and csv columns count do not match.')
-    }
-
-    expectedHeaders.sort()
-    headers.sort()
-
-    if (!headers.every((value, index) => value === expectedHeaders[index])) {
-      throw new Error('Definition columns count and csv columns count do not match.')
-    }
-
-    this.headers = headers
+  private createCsvStream() {
+    return fs.createReadStream(this.path)
+      .pipe(parse({
+        // Byte order mark? What is that?
+        bom: true,
+        // Specify fields so that the data returns as objects
+        columns: (headers: string[]) => this.validateHeaders(headers),
+      }))
   }
 
-  onError(error: unknown) {
+  private validateHeaders(headers: string[]): string[] {
+    const expected = this.fields
+
+    if (headers.length !== expected.length) {
+      throw new SeedException('Definition columns count and csv columns count do not match.')
+    }
+
+    const sortedExpected = expected.slice().sort()
+    const sortedHeaders = headers.slice().sort()
+
+    if (!sortedHeaders.every((value, index) => value === sortedExpected[index])) {
+      throw new SeedException('Headers from csv file do not match the expected headers.')
+    }
+
+    return this.headers = headers
+  }
+
+  private handleError(error: unknown) {
     throw new SeedException('Parse error: ' + error)
   }
 
-  async onData(data: object) {
+  private async processRow(data: object) {
     this.rows.push(data)
     this.bufferCount++
 
     if (this.bufferCount === BUFFER_LENGTH) {
+      // Here, this.rows has length of BUFFER_LENGTH
+      // or potentially less if it is the end of the stream.
       await this.processRows()
       this.resetRows()
     }
   }
 
-  async processRows() {
-    // Here, this.rows has length of BUFFER_LENGTH
-    // or potentially less if it is the end of the stream.
-
-    await this.processor.handle(this.rows)
+  private processRows(): Promise<void> {
+    return this.processor.handle(this.rows)
   }
 
-  resetRows() {
+  private resetRows() {
     this.bufferCount = 0
     this.rows = []
   }
 
-  async onEnd(rowCount: number) {
+  private async onEnd(rowCount: number) {
     this.rowCount = rowCount
 
     if (this.rows.length) {

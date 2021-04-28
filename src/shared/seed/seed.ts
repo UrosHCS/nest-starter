@@ -1,8 +1,8 @@
-import { Column } from './column'
-import { Query } from './query'
+import { Column } from './fields/column'
+import { Relation } from './fields/relation'
+import { Resolver, ResolverFunction } from './fields/resolver'
+import { Query } from './processors/query'
 import { Reader } from './reader'
-import { Relation } from './relation'
-import { Resolver, ResolverFunction } from './resolver'
 
 export interface NoArgConstructor<Class> {
   new (): Class
@@ -37,6 +37,16 @@ export abstract class Seed<E> {
 
   protected abstract filePath: string
 
+  async run(): Promise<void> {
+    const columns = this.definition()
+
+    const fields = Object.keys(columns)
+
+    const query = new Query(this.entityClass, columns)
+
+    await new Reader(this.filePath, fields, query).read()
+  }
+
   abstract definition(): object
 
   /**
@@ -69,11 +79,5 @@ export abstract class Seed<E> {
     relation?: FieldRelation<R>,
   ): Resolver<R> {
     return new Resolver<R>(name, resolver, relation)
-  }
-
-  async run(): Promise<void> {
-    const columns = this.definition()
-
-    await new Reader(this.filePath, columns, new Query(this.entityClass, columns)).read()
   }
 }

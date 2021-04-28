@@ -13,7 +13,7 @@ export class CredentialSeed extends Seed<Credential> {
       id: this.field('id'),
       value: this.field('value'),
       type: this.field('type'),
-      userId: this.field('user', {
+      userId: this.field('userId', {
         databaseField: 'userId',
         relation: {
           entityClass: User,
