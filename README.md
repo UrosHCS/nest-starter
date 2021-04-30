@@ -6,9 +6,9 @@ This repository was inspired by the amazing [Laravel](https://laravel.com/) fram
 
 - Database migrations (TypeORM sync feature),
 - Entity (model) factories, used mainly for testing purposes,
-- Some basic seeding,
+- Custom seeding feature,
 - REPL that has the application context ready for use (ard),
-- Authentication endpoints ready (/login, /register, /me),
+- Local and google authentication,
 - Basic pagination functionality,
 - Separate database setup for dev/prod and tests,
 - Separate configuration per module,
@@ -21,15 +21,14 @@ Some smaller features also, check out the `shared` module.
 
 TODO:
 
-- Write a seeding package,
-- Set up cache,
-- Set up websocket,
-- Set up mail,
-- Set up image upload,
-- Set up auth with google and facebook,
-- Set up queue,
-- Set up translation,
-- Set up swagger,
+- cache,
+- websocket,
+- mail,
+- image upload,
+- auth with facebook,
+- queue,
+- translation,
+- swagger,
 
 ## Set up
 

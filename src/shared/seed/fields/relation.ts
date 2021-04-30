@@ -1,22 +1,35 @@
+import { NoArgConstructor } from 'src/shared/common/no.arg.constructor'
 import { getConnection } from 'typeorm'
-import { FieldRelation, NoArgConstructor } from '../seed'
-import { Column } from './column'
+import { Column, ColumnOptions } from './column'
+
+export interface RelationOptions<E> extends ColumnOptions {
+  /**
+   * Another entity from which to resolve the field
+   */
+  relation: FieldRelation<E>
+}
+
+export type FieldRelation<E> = {
+  entityClass: NoArgConstructor<E>
+  displayField: keyof E
+  valueField: keyof E
+}
 
 export class Relation<E> extends Column {
-  constructor(name: string, private relation: FieldRelation<E>) {
+  constructor(name: string, protected options: RelationOptions<E>) {
     super(name)
   }
 
   private getEntity(): NoArgConstructor<E> {
-    return this.relation.entityClass
+    return this.options.relation.entityClass
   }
 
   private getDisplayField(): keyof E {
-    return this.relation.displayField
+    return this.options.relation.displayField
   }
 
   private getValueField(): keyof E {
-    return this.relation.valueField
+    return this.options.relation.valueField
   }
 
   getPlaceholder(): string {

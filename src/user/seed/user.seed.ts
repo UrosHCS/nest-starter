@@ -7,12 +7,12 @@ export class UserSeed extends Seed<User> {
   protected filePath = 'src/user/seed/user.seed.csv'
 
   definition() {
-    return {
-      // Fields
-      id: this.field('id'),
-      name: this.field('name'),
-      email: this.field('email'),
-      role: this.field('role'),
-    }
+    return [
+      // stop the prettier
+      this.column('id'),
+      this.column('name'),
+      this.column('email'),
+      this.column('role'),
+    ]
   }
 }

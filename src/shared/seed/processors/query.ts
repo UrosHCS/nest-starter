@@ -1,7 +1,8 @@
 import { getConnection } from 'typeorm'
+import { Columns } from '../seed'
 
 export class Query {
-  constructor(private entityClass: Function, private columns: object) {}
+  constructor(private entityClass: Function, private columns: Columns) {}
 
   async handle(rows: object[]) {
     const columns = this.columns
@@ -23,9 +24,9 @@ export class Query {
       const placeholderRow: any[] = []
       for (const field in row) {
         // Shouldn't need to check if columns[field] exists
-        // since that should be done in the reader.        
+        // since that should be done in the reader.
         const column = columns[field]
-        const placeholder = column.getPlaceholder()
+        const placeholder = await column.getPlaceholder()
         placeholderRow.push(placeholder)
 
         if (placeholder.includes('?')) {
@@ -33,7 +34,7 @@ export class Query {
         }
 
         if (firstIteration) {
-          columnNames.push(field)
+          columnNames.push(column.getDatabaseFieldName())
         }
       }
 

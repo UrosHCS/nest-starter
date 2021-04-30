@@ -1,4 +1,5 @@
 import * as Faker from 'faker'
+import { NoArgConstructor } from 'src/shared/common/no.arg.constructor'
 import { getRepository } from 'typeorm'
 
 // Entity attributes but can also contain a Factory
@@ -34,8 +35,6 @@ export type FactoryMethod<E> = (
   faker: typeof Faker,
   attributes: Attributes<E>,
 ) => Attributes<E> | Promise<Attributes<E>>
-
-export type NoArgConstructor<Class> = new () => Class
 
 // Creating one entity needs just attributes for it (which are actually optional)
 type CreatorOfOne<E> = (attributes?: Attributes<E>) => Promise<E>
