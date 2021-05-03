@@ -1,5 +1,5 @@
-import { User } from 'src/user/user.entity'
-import { UserFactory } from 'src/user/user.factory'
+import { User } from 'src/user/entities/user.entity'
+import { UserFactory } from 'src/user/factories/user.factory'
 import { after, before, ctx } from '../ctx'
 
 describe('users get', () => {

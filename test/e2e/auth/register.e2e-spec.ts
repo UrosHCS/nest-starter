@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt'
 import { Credential } from 'src/auth/credential.entity'
-import { Role, User } from 'src/user/user.entity'
+import { Role, User } from 'src/user/entities/user.entity'
 import { after, before, ctx } from '../ctx'
 
 describe('Register', () => {

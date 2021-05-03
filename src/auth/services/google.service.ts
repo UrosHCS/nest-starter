@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { User } from 'src/user/user.entity'
-import { UserService } from 'src/user/user.service'
+import { User } from 'src/user/entities/user.entity'
+import { UserService } from 'src/user/services/user.service'
 import { CredentialType } from '../credential.entity'
 import { OauthUser } from '../interfaces/oauth.user'
 import { CredentialService } from './credential.service'

@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common'
-import { UserTransformer } from './transformers/user.transformer'
-import { UserFilter } from './user.filter.dto'
-import { UserService } from './user.service'
+import { UserFilter } from '../dtos/user.filter.dto'
+import { UserService } from '../services/user.service'
+import { UserTransformer } from '../transformers/user.transformer'
 
 @Controller('users')
 export class UserController {

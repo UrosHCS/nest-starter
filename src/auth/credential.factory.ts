@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt'
 import { Attributes, BaseFactory } from 'src/shared/factories/factory'
-import { UserFactory } from 'src/user/user.factory'
+import { UserFactory } from 'src/user/factories/user.factory'
 import { Credential, CredentialType } from './credential.entity'
 
 export class CredentialFactory extends BaseFactory<Credential> {

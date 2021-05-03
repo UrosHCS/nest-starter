@@ -1,14 +1,14 @@
 import { BaseFactory } from 'src/shared/factories/factory'
-import { Role, User } from './user.entity'
+import { Gender, Profile } from '../entities/profile.entity'
 
-export class UserFactory extends BaseFactory<User> {
-  protected entityClass = User
+export class ProfileFactory extends BaseFactory<Profile> {
+  protected entityClass = Profile
 
   definition() {
     return {
       name: this.faker.internet.userName(),
       email: this.faker.internet.email(),
-      role: Role.client,
+      gender: Gender.male,
     }
   }
 }

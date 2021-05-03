@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer'
 import { IsIn, IsInt, Min } from 'class-validator'
-import { User } from 'src/user/user.entity'
+import { User } from 'src/user/entities/user.entity'
 
 const userFields: Array<keyof User> = ['id', 'email', 'role', 'createdAt', 'updatedAt']
 

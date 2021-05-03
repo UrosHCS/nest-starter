@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { Paginator } from 'src/shared/database/paginator'
-import { Role, User } from 'src/user/user.entity'
-import { UserRepository } from 'src/user/user.repository'
-import { FindConditions } from 'typeorm'
-import { UserFilter } from './user.filter.dto'
+import { Role, User } from 'src/user/entities/user.entity'
+import { UserRepository } from 'src/user/repositories/user.repository'
+import { UserFilter } from '../dtos/user.filter.dto'
+
+interface FindOne {
+  id?: number
+  email?: string
+}
 
 @Injectable()
 export class UserService {
@@ -19,12 +23,12 @@ export class UserService {
     })
   }
 
-  findOne(options: FindConditions<User>): Promise<User | undefined> {
-    return this.repo.findOne(options)
+  findOne(where: FindOne): Promise<User | undefined> {
+    return this.repo.findOne(where)
   }
 
-  findOneOrFail(options: FindConditions<User>): Promise<User> {
-    return this.repo.findOneOrFail(options)
+  findOneOrFail(where: FindOne): Promise<User> {
+    return this.repo.findOneOrFail(where)
   }
 
   create(attributes: { name?: string; email: string; role?: Role }) {

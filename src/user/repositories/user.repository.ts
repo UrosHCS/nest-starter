@@ -1,6 +1,6 @@
 import { BaseRepository } from 'src/shared/database/base.repository'
 import { EntityRepository, Not } from 'typeorm'
-import { Role, User } from './user.entity'
+import { Role, User } from '../entities/user.entity'
 
 @EntityRepository(User)
 export class UserRepository extends BaseRepository<User> {

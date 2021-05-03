@@ -1,6 +1,6 @@
 import { Credential } from 'src/auth/credential.entity'
 import { Seed } from 'src/shared/seed/seed'
-import { User } from 'src/user/user.entity'
+import { User } from 'src/user/entities/user.entity'
 
 export class CredentialSeed extends Seed<Credential> {
   protected entityClass = Credential
