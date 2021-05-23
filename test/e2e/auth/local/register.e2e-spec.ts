@@ -1,7 +1,8 @@
 import { compare } from 'bcrypt'
 import { Credential } from 'src/auth/credential.entity'
 import { Role, User } from 'src/user/entities/user.entity'
-import { after, before, ctx } from '../ctx'
+import { after, before, ctx } from 'test/e2e/ctx'
+import { patterns } from 'test/helpers/regex'
 
 describe('Register', () => {
   beforeEach(before)
@@ -18,9 +19,7 @@ describe('Register', () => {
       .expect(201)
       .expect((res) => {
         expect(res.body.data).toHaveProperty('token')
-        expect(res.body.data.token).toMatch(
-          /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/,
-        )
+        expect(res.body.data.token).toMatch(patterns.jwt)
         expect(res.body.data).toHaveProperty('user.email', email)
         expect(res.body.data).toHaveProperty('user.role', Role.client)
         expect(res.body.data).not.toHaveProperty('user.password')

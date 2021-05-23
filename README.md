@@ -21,7 +21,6 @@ Some smaller features also, check out the `shared` module.
 
 TODO:
 
-- cache,
 - websocket,
 - mail,
 - image upload,
@@ -29,6 +28,10 @@ TODO:
 - queue,
 - translation,
 - swagger,
+
+Would be useful at some point:
+
+- cache,
 
 ## Set up
 

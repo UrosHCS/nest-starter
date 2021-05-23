@@ -6,17 +6,17 @@ import { appSetup } from 'src/app-setup'
 import { TestContext } from './test.context'
 
 export abstract class ExpressContext extends TestContext {
+  moduleRef: TestingModule
+
   /**
    * Return module metadata that you want in your nest app instance.
    */
   protected abstract moduleMetadata(): ModuleMetadata
 
   async createApp(): Promise<INestApplication> {
-    const moduleFixture: TestingModule = await Test.createTestingModule(
-      this.moduleMetadata(),
-    ).compile()
+    this.moduleRef = await Test.createTestingModule(this.moduleMetadata()).compile()
 
-    const app = moduleFixture.createNestApplication<NestExpressApplication>(new ExpressAdapter())
+    const app = this.moduleRef.createNestApplication<NestExpressApplication>(new ExpressAdapter())
 
     // We do the same setup here and in main
     appSetup(app)

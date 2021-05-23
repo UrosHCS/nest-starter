@@ -1,5 +1,5 @@
 import { TokenService } from 'src/auth/services/token.service'
-import { after, before, ctx } from '../ctx'
+import { after, before, ctx } from 'test/e2e/ctx'
 
 describe('Get logged in user', () => {
   beforeEach(before)

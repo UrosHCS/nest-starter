@@ -33,6 +33,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   validate(accessToken: string, refreshToken: string, profile: Profile): OauthUser {
+    this.authenticate
     // return accessToken also if you want to use it to make requests
     // to google API about the logged in user
     return {
