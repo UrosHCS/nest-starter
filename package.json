@@ -22,9 +22,8 @@
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
     "seed": "node ./scripts/seed.js",
-    "ard": "node --experimental-repl-await -r ./scripts/ard.js",
-    "ts-ard": "ts-node -r tsconfig-paths/register -r ./scripts/ard.ts",
-    "ard-from-src": "node --experimental-repl-await -r ts-node/register -r tsconfig-paths/register -r ./scripts/ard.ts"
+    "ard": "node --experimental-repl-await ./scripts/ard.js",
+    "ts-ard": "ts-node -r tsconfig-paths/register ./scripts/ard.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.5",

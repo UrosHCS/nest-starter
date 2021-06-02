@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core'
 import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
+import * as repl from 'repl'
 import { AppModule } from 'src/app/app.module'
 import { getMetadataArgsStorage } from 'typeorm'
 
 async function ard(app: NestExpressApplication) {
-  let registeredGlobalVariables = {}
+  const vars = {}
 
-  function registerGlobal(key: string, value: any, description: string = '?') {
-    registeredGlobalVariables[key] = description
-    global[key] = value
+  const replServer = repl.start()
+
+  replServer.on('exit', process.exit)
+
+  function registerGlobal(key: string, value: unknown, description: string = '?') {
+    vars[key] = description
+    replServer.context[key] = value
   }
 
   registerGlobal('app', app, 'nest application instance')
@@ -26,10 +31,12 @@ async function ard(app: NestExpressApplication) {
     registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
   }
 
-  registerGlobal('globals', registeredGlobalVariables, 'list of registered global variables')
+  registerGlobal('vars', vars, 'list of registered variables')
 
-  console.log('\nWelcome to ard! Here are all the registered global variables:')
-  console.log(registeredGlobalVariables)
+  console.log('\nWelcome to ard! Here are all the registered variables:')
+  console.log(vars)
+
+  replServer.displayPrompt()
 }
 
 async function bootstrap(): Promise<NestExpressApplication> {

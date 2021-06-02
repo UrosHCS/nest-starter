@@ -1,25 +1,26 @@
 // Run this file with
-// node --experimental-repl-await -r ./scripts/ard.js
+// node --experimental-repl-await ./scripts/ard.js
 // or
 // npm run ard
 'use strict'
 
 const { getMetadataArgsStorage } = require('typeorm')
+const repl = require('repl')
 
 require('./cli-set-up').then(app => {
   // Keep track so we can print them for the user
-  let registeredGlobalVariables = {}
+  let vars = {}
+
+  const replServer = repl.start()
+
+  replServer.on('exit', process.exit)
 
   function registerGlobal(key, value, description = '?') {
-    registeredGlobalVariables[key] = description
-    global[key] = value
+    vars[key] = description
+    replServer.context[key] = value
   }
 
-  // The app implements INestApplicationContext interface
   registerGlobal('app', app, 'nest application instance')
-
-  // const entityMetadata = 
-  // registerGlobal('entityMetadata', entityMetadata, 'Entity metadata')
 
   for (const repoMeta of getMetadataArgsStorage().entityRepositories) {
     const repoClass = repoMeta.target
@@ -34,14 +35,12 @@ require('./cli-set-up').then(app => {
     registerGlobal(repoVarName, app.get(repoClass), 'repository instance')
   }
 
-  // const { factory } = require('../dist/src/shared/factories/factory')
+  registerGlobal('vars', vars, 'list of registered variables')
 
-  // registerGlobal('factory', factory, 'function for making entities')
+  console.log('\nWelcome to ard! Here are all the registered variables:')
+  console.log(vars)
 
-  registerGlobal('globals', registeredGlobalVariables, 'list of registered global variables')
-
-  console.log('\nWelcome to ard! Here are all the registered global variables:')
-  console.log(registeredGlobalVariables)
+  replServer.displayPrompt();
 })
 .catch(reason => {
   console.log(reason)
