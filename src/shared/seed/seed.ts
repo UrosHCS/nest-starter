@@ -14,14 +14,16 @@ export abstract class Seed<E> {
 
   protected abstract filePath: string
 
+  protected bufferLength: number = 1000
+
   async run(): Promise<void> {
     const columns = this.columns()
 
     const fields = Object.keys(columns)
 
-    const query = new Query(this.entityClass, columns)
+    const processor = new Query(this.entityClass, columns)
 
-    await new Reader(this.filePath, fields, query).read()
+    await new Reader({ fields, processor, bufferLength: this.bufferLength }).read(this.filePath)
   }
 
   abstract definition(): Column[]

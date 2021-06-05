@@ -16,12 +16,13 @@ export class Query {
     const placeholderRows: string[] = []
 
     const bindings: Array<string | number | boolean | null> = []
-    console.log(rows)
-    console.log(columns)
+    // console.log(rows)
+    // console.log(columns)
 
     let firstIteration = true
     for (const row of rows) {
-      const placeholderRow: any[] = []
+      const placeholderRow: string[] = []
+
       for (const field in row) {
         // Shouldn't need to check if columns[field] exists
         // since that should be done in the reader.
@@ -47,7 +48,7 @@ export class Query {
 
     const sql = `INSERT INTO ${table}\n(${columnNames})\nVALUES\n${values}`
 
-    console.log(sql, bindings)
+    console.log(sql)
 
     const result = await manager.query(sql, bindings)
   }

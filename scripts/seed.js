@@ -1,7 +1,7 @@
 // TODO: make a cool seeding package instead of this
 'use strict'
 
-const { User } = require('../dist/src/user/user.entity')
+const { User } = require('../dist/src/user/entities/user.entity')
 const { Credential } = require('../dist/src/auth/credential.entity')
 const { getRepository, MoreThanOrEqual, getConnection } = require('typeorm')
 const { UserSeed } = require('../dist/src/user/seed/user.seed')
@@ -9,13 +9,10 @@ const { CredentialSeed } = require('../dist/src/auth/seed/credential.seed')
 
 require('./cli-set-up').then(async () => {
 
-  await getRepository(User).delete({
-    id: MoreThanOrEqual(1)
-  })
-
-  await getRepository(Credential).delete({
-    id: MoreThanOrEqual(1)
-  })
+  await clearTables([
+    User,
+    Credential,
+  ])
 
   console.log('Cleared all tables. Seeding...')
 
@@ -39,6 +36,6 @@ async function clearTables(models) {
     await getRepository(model).delete({
       id: MoreThanOrEqual(1)
     })
-    console.log('Cleared table ' + model.constructor.name)
+    console.log('Cleared table ' + model.prototype.constructor.name)
   }
 }

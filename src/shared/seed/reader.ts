@@ -2,10 +2,24 @@ import * as parse from 'csv-parse'
 import * as fs from 'fs'
 import { SeedException } from './exceptions/seed.exception'
 
-const BUFFER_LENGTH = 3
-
 interface Processor {
   handle(rows: object[]): Promise<void>
+}
+
+interface Options {
+  /**
+   * Fields (headers) that should be extracted from the csv file
+   */
+  fields: string[]
+  /**
+   * Object that does something with the data
+   * from the csv file as it comes in.
+   */
+  processor: Processor
+  /**
+   * How many rows to process at once
+   */
+  bufferLength: number
 }
 
 export class Reader {
@@ -17,28 +31,24 @@ export class Reader {
 
   private headers: string[]
 
-  constructor(
-    /**
-     * Path to a csv file that should be read
-     */
-    private path: string,
-    /**
-     * Fields (headers) that should be extracted from the csv file
-     */
-    private fields: string[],
-    /**
-     * Object that does something with the data
-     * from the csv file as it comes in.
-     */
-    private processor: Processor
-  ) {}
+  private fields: string[]
 
-  async read() {
-    if (!fs.existsSync(this.path)) {
-      throw new SeedException(`File ${this.path} does not exist.`)
+  private processor: Processor
+
+  private bufferLength: number
+
+  constructor(options: Options) {
+    this.fields = options.fields
+    this.processor = options.processor
+    this.bufferLength = options.bufferLength
+  }
+
+  async read(path: string) {
+    if (!fs.existsSync(path)) {
+      throw new SeedException(`File ${path} does not exist.`)
     }
 
-    const csvStream = this.createCsvStream()
+    const csvStream = this.createCsvStream(path)
 
     let rowCount = 0
 
@@ -54,14 +64,15 @@ export class Reader {
     }
   }
 
-  private createCsvStream() {
-    return fs.createReadStream(this.path)
-      .pipe(parse({
+  private createCsvStream(path: string) {
+    return fs.createReadStream(path).pipe(
+      parse({
         // Byte order mark? What is that?
         bom: true,
         // Specify fields so that the data returns as objects
         columns: (headers: string[]) => this.validateHeaders(headers),
-      }))
+      }),
+    )
   }
 
   private validateHeaders(headers: string[]): string[] {
@@ -78,7 +89,7 @@ export class Reader {
       throw new SeedException('Headers from csv file do not match the expected headers.')
     }
 
-    return this.headers = headers
+    return (this.headers = headers)
   }
 
   private handleError(error: unknown) {
@@ -89,8 +100,8 @@ export class Reader {
     this.rows.push(data)
     this.bufferCount++
 
-    if (this.bufferCount === BUFFER_LENGTH) {
-      // Here, this.rows has length of BUFFER_LENGTH
+    if (this.bufferCount === this.bufferLength) {
+      // Here, this.rows has length of this.bufferLength
       // or potentially less if it is the end of the stream.
       await this.processRows()
       this.resetRows()
