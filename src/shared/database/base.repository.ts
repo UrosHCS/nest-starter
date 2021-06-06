@@ -1,4 +1,4 @@
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
+import { DeepPartial, FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 import { Paginator } from './paginator'
 
 export interface PaginateOptions<E> extends FindOneOptions<E> {
@@ -29,5 +29,13 @@ export abstract class BaseRepository<E> extends Repository<E> {
     const [entities, total] = await this.findAndCount(options)
 
     return new Paginator(entities, page, limit, total)
+  }
+
+  /**
+   * Same as save but returned object is an instance of the entity,
+   * not a plain object.
+   */
+  createAndSave(attributes: DeepPartial<E>): Promise<E> {
+    return this.save(this.create(attributes))
   }
 }

@@ -38,8 +38,7 @@ describe('Get logged in user', () => {
 
     const malformedToken = generateMalformedToken(token)
 
-    return ctx
-      .request()
+    return ctx.request
       .get('/me')
       .set('Authorization', 'Bearer ' + malformedToken)
       .expect(401)
@@ -54,8 +53,7 @@ describe('Get logged in user', () => {
   it('returns logged in user', async () => {
     const user = await ctx.logIn()
 
-    return ctx
-      .request()
+    return ctx.request
       .get('/me')
       .expect(200)
       .expect((res) => {

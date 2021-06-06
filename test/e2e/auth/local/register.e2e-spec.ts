@@ -9,8 +9,7 @@ describe('Register', () => {
 
   it('creates and logs in the user if fields are valid', async () => {
     const email = 'some@example.com'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -29,8 +28,7 @@ describe('Register', () => {
   it('hashes user password correctly', async () => {
     const email = 'some@example.com'
     const password = 'somePassword'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -51,8 +49,7 @@ describe('Register', () => {
   it('trims email', async () => {
     const email = '  some@example.com  '
     const trimmedEmail = 'some@example.com'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -68,8 +65,7 @@ describe('Register', () => {
     const email = 'some@example.com'
     const password = '  somePassword  '
     const trimmedPassword = 'somePassword'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -93,8 +89,7 @@ describe('Register', () => {
   it('does not allow common passwords', async () => {
     const email = 'some@example.com'
     const password = '12345678'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -112,8 +107,7 @@ describe('Register', () => {
 
   it('does not allow email and password to be the same', async () => {
     const email = 'some@example.com'
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email,
@@ -132,8 +126,7 @@ describe('Register', () => {
   it('fails if email already exists', async () => {
     const user = await ctx.createUser()
 
-    return ctx
-      .request()
+    return ctx.request
       .post('/register')
       .send({
         email: user.email,

@@ -22,8 +22,9 @@
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
     "seed": "node ./scripts/seed.js",
+    "ts-seed": "ts-node -r tsconfig-paths/register ./scripts/seed.ts",
     "ard": "node --experimental-repl-await ./scripts/ard.js",
-    "ts-ard": "ts-node -r tsconfig-paths/register ./scripts/ard.ts"
+    "ts-ard": "node --experimental-repl-await -r tsconfig-paths/register -r ts-node/register ./scripts/ard.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.5",
@@ -61,6 +62,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/faker": "^5.1.5",
     "@types/jest": "^26.0.20",
+    "@types/multer": "^1.4.5",
     "@types/node": "^14.14.20",
     "@types/passport-google-oauth20": "^2.0.6",
     "@types/passport-jwt": "^3.0.3",

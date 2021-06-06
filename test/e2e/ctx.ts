@@ -1,5 +1,5 @@
 // This is a helper file that makes it easier to work with context classes
-import { E2EContext } from '../context/e2e.context'
+import { E2EContext, OverrideClasses } from '../context/e2e.context'
 
 export let ctx: E2EContext
 
@@ -9,6 +9,11 @@ export let ctx: E2EContext
 export async function before(): Promise<void> {
   ctx = new E2EContext()
   await ctx.before()
+}
+
+export async function beforeWithMock(overrideClasses: OverrideClasses): Promise<void> {
+  ctx = new E2EContext()
+  await ctx.before(overrideClasses)
 }
 
 export async function after(): Promise<void> {
