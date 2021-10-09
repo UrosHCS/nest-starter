@@ -108,7 +108,7 @@ describe('users index', () => {
       .expect((res) => {
         expect(res.body).toHaveProperty('message.0.constraints.isIn')
         expect(res.body.message[0].constraints.isIn).toEqual(
-          'direction must be one of the following values: asc,desc',
+          'direction must be one of the following values: asc, desc',
         )
       })
   })
