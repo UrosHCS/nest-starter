@@ -6,6 +6,8 @@ export interface PaginateOptions<E> extends FindOneOptions<E> {
   limit?: number
 }
 
+type DestructuredOptions<E> = { page?: number; limit?: number } & FindManyOptions<E>
+
 export abstract class BaseRepository<E> extends Repository<E> {
   protected DEFAULT_PAGE = 1
   protected DEFAULT_LIMIT = 10
@@ -19,12 +21,14 @@ export abstract class BaseRepository<E> extends Repository<E> {
    * FindOneOptions because "take" and "skip" are gonna be overridden.
    */
   async paginate(paginationOptions: PaginateOptions<E>): Promise<Paginator<E>> {
-    let { page, limit, ...options } = paginationOptions
+    let {
+      page = this.DEFAULT_PAGE,
+      limit = this.DEFAULT_LIMIT,
+      ...options
+    }: DestructuredOptions<E> = paginationOptions
 
-    page = page || this.DEFAULT_PAGE
-    limit = limit || this.DEFAULT_LIMIT
-    ;(options as FindManyOptions).take = limit
-    ;(options as FindManyOptions).skip = (page - 1) * limit
+    options.take = limit
+    options.skip = (page - 1) * limit
 
     const [entities, total] = await this.findAndCount(options)
 

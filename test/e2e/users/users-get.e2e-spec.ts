@@ -14,22 +14,14 @@ describe('users get', () => {
   })
 
   it('returns the user if it exists', async () => {
-    return ctx.request
-      .get('/users/' + user.id)
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.data.id).toEqual(user.id)
-        expect(res.body.data.email).toEqual(user.email)
-      })
+    const res = await ctx.request.get('/users/' + user.id).expect(200)
+    expect(res.body.data.id).toEqual(user.id)
+    expect(res.body.data.email).toEqual(user.email)
   })
 
   it('fails if the user does not exist', async () => {
-    return ctx.request
-      .get('/users/' + user.id + 1)
-      .expect(404)
-      .expect((res) => {
-        expect(res.body.error).toEqual('Not Found')
-      })
+    const res = await ctx.request.get('/users/' + user.id + 1).expect(404)
+    expect(res.body.error).toEqual('Not Found')
   })
 
   afterAll(after)

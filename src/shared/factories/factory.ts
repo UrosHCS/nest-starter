@@ -1,4 +1,4 @@
-import * as Faker from 'faker'
+import { faker as Faker } from '@faker-js/faker'
 import { NoArgConstructor } from 'src/shared/common/no.arg.constructor'
 import { getRepository } from 'typeorm'
 
@@ -67,7 +67,9 @@ export abstract class BaseFactory<E> implements FactoryInterface<E> {
 
     const repo = getRepository<E>(this.entityClass)
 
-    return await repo.save<E>(entity)
+    await repo.insert(entity)
+
+    return entity
   }
 
   async make(attributes: Attributes<E> = {}): Promise<E> {
@@ -100,25 +102,25 @@ export abstract class BaseFactory<E> implements FactoryInterface<E> {
   }
 
   async createMany(amount: number, attributes: Attributes<E> = {}): Promise<E[]> {
-    return await this.many(this.create, amount, attributes)
+    return await this.many('create', amount, attributes)
   }
 
   async makeMany(amount: number, attributes: Attributes<E> = {}): Promise<E[]> {
-    return await this.many(this.make, amount, attributes)
+    return await this.many('make', amount, attributes)
   }
 
   private async many(
-    creator: CreatorOfOne<E>,
+    creator: 'make' | 'create',
     amount: number,
     attributes: Attributes<E> = {},
   ): Promise<E[]> {
-    const entities: Array<Promise<E>> = []
+    const creations: Array<Promise<E>> = []
 
     while (amount--) {
-      entities.push(creator.bind(this)(attributes))
+      creations.push(this[creator](attributes))
     }
 
-    return Promise.all(entities)
+    return Promise.all(creations)
   }
 
   abstract definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>

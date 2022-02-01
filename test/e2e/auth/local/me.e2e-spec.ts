@@ -38,34 +38,28 @@ describe('Get logged in user', () => {
 
     const malformedToken = generateMalformedToken(token)
 
-    return ctx.request
+    const res = await ctx.request
       .get('/me')
       .set('Authorization', 'Bearer ' + malformedToken)
       .expect(401)
-      .expect((res) => {
-        expect(res.body).toStrictEqual({
-          statusCode: 401,
-          message: 'Unauthorized',
-        })
-      })
+    expect(res.body).toStrictEqual({
+      statusCode: 401,
+      message: 'Unauthorized',
+    })
   })
 
   it('returns logged in user', async () => {
     const user = await ctx.logIn()
 
-    return ctx.request
-      .get('/me')
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.data).toStrictEqual({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          createdAt: user.createdAt.toISOString(),
-          updatedAt: user.updatedAt.toISOString(),
-        })
-      })
+    const res = await ctx.request.get('/me').expect(200)
+    expect(res.body.data).toStrictEqual({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    })
   })
 
   afterEach(after)
