@@ -1,12 +1,13 @@
 // This is a test for home page but it is actually a blueprint for new tests.
+import * as test from 'japa'
 import { after, before, ctx } from '../ctx'
 
-describe('a test', () => {
-  beforeEach(before)
+test.group('a test', (group) => {
+  group.beforeEach(before)
 
-  it('tests something', async () => {
-    return ctx.request.get('/').expect(200)
+  test('tests something', async () => {
+    await ctx.request.get('/').expect(200)
   })
 
-  afterEach(after)
+  group.afterEach(after)
 })

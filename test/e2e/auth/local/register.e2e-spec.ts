@@ -1,13 +1,14 @@
 import { compare } from 'bcrypt'
+import * as test from 'japa'
 import { Credential } from 'src/auth/credential.entity'
 import { Role, User } from 'src/user/entities/user.entity'
 import { after, before, ctx } from 'test/e2e/ctx'
 import { patterns } from 'test/helpers/regex'
 
-describe('Register', () => {
-  beforeEach(before)
+test.group('Register', (group) => {
+  group.beforeEach(before)
 
-  it('creates and logs in the user if fields are valid', async () => {
+  test('creates and logs in the user if fields are valid', async (assert) => {
     const email = 'some@example.com'
     const res = await ctx.request
       .post('/register')
@@ -17,14 +18,14 @@ describe('Register', () => {
       })
       .expect(201)
 
-    expect(res.body.data).toHaveProperty('token')
-    expect(res.body.data.token).toMatch(patterns.jwt)
-    expect(res.body.data).toHaveProperty('user.email', email)
-    expect(res.body.data).toHaveProperty('user.role', Role.client)
-    expect(res.body.data).not.toHaveProperty('user.password')
+    assert.property(res.body.data, 'token')
+    assert.match(res.body.data.token, patterns.jwt)
+    assert.nestedPropertyVal(res.body.data, 'user.email', email)
+    assert.nestedPropertyVal(res.body.data, 'user.role', Role.client)
+    assert.notNestedProperty(res.body.data, 'user.password')
   })
 
-  it('hashes user password correctly', async () => {
+  test('hashes user password correctly', async (assert) => {
     const email = 'some@example.com'
     const password = 'somePassword'
     await ctx.request
@@ -36,15 +37,15 @@ describe('Register', () => {
       .expect(201)
 
     const user = await ctx.repo(User).findOneOrFail({ email })
-    expect(user.id).toBeTruthy()
+    assert.isAtLeast(user.id, 1)
     const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
-    expect(userPassword.value).not.toEqual(password)
+    assert.notEqual(userPassword.value, password)
 
     const passwordsMatch = await compare('somePassword', userPassword.value)
-    expect(passwordsMatch).toStrictEqual(true)
+    assert.isTrue(passwordsMatch)
   })
 
-  it('trims email', async () => {
+  test('trims email', async (assert) => {
     const email = '  some@example.com  '
     const trimmedEmail = 'some@example.com'
     const res = await ctx.request
@@ -55,10 +56,11 @@ describe('Register', () => {
       })
       .expect(201)
 
-    expect(res.body.data).toHaveProperty('user.email', trimmedEmail)
+    console.log(res.body)
+    assert.nestedPropertyVal(res.body.data, 'user.email', trimmedEmail)
   })
 
-  it('does not trim password', async () => {
+  test('does not trim password', async (assert) => {
     const email = 'some@example.com'
     const password = '  somePassword  '
     const trimmedPassword = 'somePassword'
@@ -70,16 +72,16 @@ describe('Register', () => {
       })
       .expect(201)
 
-    expect(res.body.data).toHaveProperty('user.email', email)
+    assert.nestedPropertyVal(res.body.data, 'user.email', email)
     const user = await ctx.repo(User).findOneOrFail({ email })
-    expect(user).toBeTruthy()
+    assert.isObject(user)
     const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
-    expect(userPassword.value).not.toEqual(password)
-    expect(await compare(trimmedPassword, userPassword.value)).toStrictEqual(false)
-    expect(await compare(password, userPassword.value)).toStrictEqual(true)
+    assert.notEqual(userPassword.value, password)
+    assert.isFalse(await compare(trimmedPassword, userPassword.value))
+    assert.isTrue(await compare(password, userPassword.value))
   })
 
-  it('does not allow common passwords', async () => {
+  test('does not allow common passwords', async (assert) => {
     const email = 'some@example.com'
     const password = '12345678'
     const res = await ctx.request
@@ -90,14 +92,14 @@ describe('Register', () => {
       })
       .expect(400)
 
-    expect(res.body).toEqual({
+    assert.deepStrictEqual(res.body, {
       statusCode: 400,
       error: 'Bad Request',
       message: `Password ${password} can't be used because it is too common.`,
     })
   })
 
-  it('does not allow email and password to be the same', async () => {
+  test('does not allow email and password to be the same', async (assert) => {
     const email = 'some@example.com'
     const res = await ctx.request
       .post('/register')
@@ -107,14 +109,14 @@ describe('Register', () => {
       })
       .expect(400)
 
-    expect(res.body).toEqual({
+    assert.deepStrictEqual(res.body, {
       statusCode: 400,
       error: 'Bad Request',
       message: 'Password cannot be same as email.',
     })
   })
 
-  it('fails if email already exists', async () => {
+  test('fails if email already exists', async (assert) => {
     const user = await ctx.createUser()
 
     const res = await ctx.request
@@ -125,7 +127,7 @@ describe('Register', () => {
       })
       .expect(400)
 
-    expect(res.body).toEqual({
+    assert.deepStrictEqual(res.body, {
       statusCode: 400,
       error: 'Bad Request',
       message: [
@@ -140,5 +142,5 @@ describe('Register', () => {
     })
   })
 
-  afterEach(after)
+  group.afterEach(after)
 })

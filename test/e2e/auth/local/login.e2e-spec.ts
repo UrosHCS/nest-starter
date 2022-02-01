@@ -1,24 +1,26 @@
+import * as test from 'japa'
 import { after, before, ctx } from 'test/e2e/ctx'
 import { patterns } from 'test/helpers/regex'
 
-describe('LogIn', () => {
-  beforeEach(before)
+test.group('LogIn', (group) => {
+  group.beforeEach(before)
 
-  it('logs in if credentials are valid', async () => {
+  test('logs in if credentials are valid', async (assert) => {
     const user = await ctx.createUser()
 
     const res = await ctx.request
       .post('/login')
       .send({ email: user.email, password: 'password' })
       .expect(200)
-    expect(res.body.data).toHaveProperty('token')
-    expect(res.body.data.token).toMatch(patterns.jwt)
-    expect(res.body.data).toHaveProperty('user.email', user.email)
-    expect(res.body.data).toHaveProperty('user.role', user.role)
-    expect(res.body.data).not.toHaveProperty('user.password')
+
+    assert.property(res.body.data, 'token')
+    assert.match(res.body.data.token, patterns.jwt)
+    assert.nestedPropertyVal(res.body.data, 'user.email', user.email)
+    assert.nestedPropertyVal(res.body.data, 'user.role', user.role)
+    assert.notNestedProperty(res.body.data, 'user.password')
   })
 
-  it('returns 401 if credentials are invalid', async () => {
+  test('returns 401 if credentials are invalid', async (assert) => {
     const user = await ctx.createUser()
 
     const res = await ctx.request
@@ -28,12 +30,13 @@ describe('LogIn', () => {
         password: 'not the right password',
       })
       .expect(401)
-    expect(res.body).toEqual({
+
+    assert.deepStrictEqual(res.body, {
       statusCode: 401,
       error: 'Unauthorized',
       message: 'Wrong password',
     })
   })
 
-  afterEach(after)
+  group.afterEach(after)
 })

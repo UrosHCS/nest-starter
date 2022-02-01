@@ -1,6 +1,6 @@
-describe('without nest setup', () => {
-
-  it('tests the most minimal thing', () => {
-    expect(2 > 1).toBe(true)
+import * as test from 'japa'
+test.group('without nest setup', () => {
+  test('tests the most minimal thing', (assert) => {
+    assert.isTrue(2 > 1)
   })
 })
