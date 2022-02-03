@@ -56,7 +56,6 @@ test.group('Register', (group) => {
       })
       .expect(201)
 
-    console.log(res.body)
     assert.nestedPropertyVal(res.body.data, 'user.email', trimmedEmail)
   })
 

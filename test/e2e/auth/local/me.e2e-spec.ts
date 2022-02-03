@@ -1,4 +1,3 @@
-import { assert } from 'console'
 import * as test from 'japa'
 import { TokenService } from 'src/auth/services/token.service'
 import { after, before, ctx } from 'test/e2e/ctx'
