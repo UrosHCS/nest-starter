@@ -1,6 +1,4 @@
-import * as test from 'japa'
-test.group('without nest setup', () => {
-  test('tests the most minimal thing', (assert) => {
-    assert.isTrue(2 > 1)
-  })
+import test from 'ava'
+test('tests the most minimal thing', (t) => {
+  t.true(2 > 1)
 })

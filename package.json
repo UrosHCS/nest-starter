@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "nest-starter",
   "version": "0.0.1",
   "description": "",
@@ -7,13 +8,14 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "build:watch": "nest build --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:debug-remote": "nest start --debug 0.0.0.0:9229 --watch",
     "start:prod": "node dist/main",
-    "test": "node -r tsconfig-paths/register -r ts-node/register test.ts",
+    "test": "ava",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -27,6 +29,7 @@
     "ts-ard": "node --experimental-repl-await -r tsconfig-paths/register -r ts-node/register ./scripts/ard.ts"
   },
   "dependencies": {
+    "@ava/typescript": "^3.0.1",
     "@nestjs/common": "^8.2.6",
     "@nestjs/config": "1.1.6",
     "@nestjs/core": "^8.2.6",
@@ -65,8 +68,8 @@
     "@types/passport-google-oauth20": "^2.0.11",
     "@types/passport-jwt": "^3.0.6",
     "@types/supertest": "^2.0.11",
+    "ava": "^4.0.1",
     "axios": "^0.25.0",
-    "japa": "^4.0.0",
     "prettier": "^2.5.1",
     "supertest": "^6.2.2",
     "ts-jest": "^27.1.3",
@@ -78,5 +81,13 @@
   "volta": {
     "node": "16.13.2",
     "npm": "8.4.0"
+  },
+  "ava": {
+		"typescript": {
+			"rewritePaths": {
+				"/": "dist/"
+			},
+			"compile": false
+		}
   }
 }

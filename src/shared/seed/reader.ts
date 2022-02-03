@@ -1,4 +1,4 @@
-import * as parse from 'csv-parse'
+import { parse } from 'csv-parse'
 import * as fs from 'fs'
 import { SeedException } from './exceptions/seed.exception'
 
