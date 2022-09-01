@@ -1,5 +1,14 @@
 # NestJS starter app
 
+## Update 2022-09-01
+I am abandoning this project and NestJS in general. There are too many decorators, too much boilerplate code, slow startup, unnecessary OOP design patterns, too much magic.
+
+Angular is dreaded for a reason. The same reason(s) applies here. I'm gonna try fastify with knex, or the knex alternative: https://github.com/koskimas/kysely. The only thing that I'm missing in knex are model relations.
+
+Don't use Nest. I'm seriously.
+
+## Introduction
+
 This is a boilerplate NestJS app based on the opinions from the Nest documentation, plus some additional ones. The purpose of this repository is similar to the very useful [nestjs-realworld-example-app](https://github.com/lujakob/nestjs-realworld-example-app).
 
 This repository was inspired by the amazing [Laravel](https://laravel.com/) framework. Some features that are included in Laravel, are also implemented in this repository. Current features are:
