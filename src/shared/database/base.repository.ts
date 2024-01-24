@@ -1,4 +1,12 @@
-import { DeepPartial, FindManyOptions, FindOneOptions, Repository } from 'typeorm'
+import {
+  DataSource,
+  DeepPartial,
+  FindManyOptions,
+  FindOneOptions,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm'
+import { NoArgConstructor } from '../common/no.arg.constructor'
 import { Paginator } from './paginator'
 
 export interface PaginateOptions<E> extends FindOneOptions<E> {
@@ -8,9 +16,13 @@ export interface PaginateOptions<E> extends FindOneOptions<E> {
 
 type DestructuredOptions<E> = { page?: number; limit?: number } & FindManyOptions<E>
 
-export abstract class BaseRepository<E> extends Repository<E> {
+export abstract class BaseRepository<E extends ObjectLiteral> extends Repository<E> {
   protected DEFAULT_PAGE = 1
   protected DEFAULT_LIMIT = 10
+
+  constructor(entityClass: NoArgConstructor<E>, dataSource: DataSource) {
+    super(entityClass, dataSource.createEntityManager())
+  }
 
   // Here we can add methods that will be usable in every repository.
   // Just make sure that every new repository extends this class.

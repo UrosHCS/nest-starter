@@ -4,13 +4,13 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator'
-import { Connection } from 'typeorm'
+import { DataSource } from 'typeorm'
 
 // This validator checks if an entity exists in the database by a specific field
 @ValidatorConstraint({ name: 'doesNotExist', async: true })
 @Injectable()
 export class DoesNotExist implements ValidatorConstraintInterface {
-  constructor(private readonly connection: Connection) {}
+  constructor(private readonly connection: DataSource) {}
 
   async validate(value: string, args: ValidationArguments): Promise<boolean> {
     const [entityClass, field] = this.parseArgs(args)

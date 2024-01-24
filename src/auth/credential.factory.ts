@@ -10,7 +10,7 @@ export class CredentialFactory extends BaseFactory<Credential> {
     return {
       type: CredentialType.local,
       value: await hash('password', 10),
-      user: new UserFactory(),
+      user: new UserFactory(this.dataSource),
     }
   }
 }

@@ -23,12 +23,12 @@ export class UserService {
     })
   }
 
-  findOne(where: FindOne): Promise<User | undefined> {
-    return this.repo.findOne(where)
+  findOne(where: FindOne): Promise<User | null> {
+    return this.repo.findOneBy(where)
   }
 
   findOneOrFail(where: FindOne): Promise<User> {
-    return this.repo.findOneOrFail(where)
+    return this.repo.findOneByOrFail(where)
   }
 
   create(attributes: { name?: string; email: string; role?: Role }) {

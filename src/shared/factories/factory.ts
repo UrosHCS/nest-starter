@@ -1,6 +1,6 @@
 import { faker as Faker } from '@faker-js/faker'
 import { NoArgConstructor } from 'src/shared/common/no.arg.constructor'
-import { getRepository } from 'typeorm'
+import { DataSource, ObjectLiteral, getRepository } from 'typeorm'
 
 // Entity attributes but can also contain a Factory
 export type Attributes<E> = {
@@ -26,9 +26,8 @@ type NestedFactoryNotAvailable = ColumnAttribute | any[]
 
 // Relation can be defined by its type or a factory of it. If the relation
 // is an array, then the factory must be of the array element type.
-type RelationSpecificFactory<E, P extends keyof E> = E[P] extends Array<infer U>
-  ? FactoryInterface<U>
-  : FactoryInterface<E[P]>
+type RelationSpecificFactory<E, P extends keyof E> =
+  E[P] extends Array<infer U> ? FactoryInterface<U> : FactoryInterface<E[P]>
 
 // The signature of the callback that creates the entity attributes.
 export type FactoryMethod<E> = (
@@ -51,10 +50,12 @@ interface FactoryInterface<E> {
   definition(attributes: Attributes<E>): Promise<Attributes<E>> | Attributes<E>
 }
 
-export abstract class BaseFactory<E> implements FactoryInterface<E> {
+export abstract class BaseFactory<E extends ObjectLiteral> implements FactoryInterface<E> {
   protected faker = Faker
   protected attributes: Attributes<E> = {}
   protected abstract entityClass: NoArgConstructor<E>
+
+  constructor(protected readonly dataSource: DataSource) {}
 
   state(attributes: Attributes<E>) {
     Object.assign(this.attributes, attributes)
@@ -65,7 +66,7 @@ export abstract class BaseFactory<E> implements FactoryInterface<E> {
   async create(attributes: Attributes<E> = {}): Promise<E> {
     const entity = await this.make(attributes)
 
-    const repo = getRepository<E>(this.entityClass)
+    const repo = this.dataSource.getRepository<E>(this.entityClass)
 
     await repo.insert(entity)
 

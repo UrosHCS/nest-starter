@@ -1,6 +1,11 @@
 import { BaseRepository } from 'src/shared/database/base.repository'
-import { EntityRepository } from 'typeorm'
 import { File } from './file.entity'
+import { Injectable } from '@nestjs/common'
+import { DataSource } from 'typeorm'
 
-@EntityRepository(File)
-export class FileRepository extends BaseRepository<File> {}
+@Injectable()
+export class FileRepository extends BaseRepository<File> {
+  constructor(dataSource: DataSource) {
+    super(File, dataSource)
+  }
+}

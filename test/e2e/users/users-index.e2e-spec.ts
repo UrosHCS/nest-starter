@@ -10,7 +10,7 @@ describe('users index', () => {
   // for afterAll. This could be less safe then beforeEach, I'm not sure.
   beforeAll(async () => {
     await before()
-    users = await new UserFactory().createMany(3)
+    users = await ctx.factories.user().createMany(3)
   })
 
   it('returns all users if limit is big enough', async () => {

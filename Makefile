@@ -4,8 +4,8 @@ enter-mysql:
 enter-app:
 	docker exec -it app bash
 
-ard:
-	docker exec -it app npm run ard
+repl:
+	docker exec -it app npm run repl
 
 jest:
 	docker exec -it app npm run test

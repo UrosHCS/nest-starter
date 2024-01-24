@@ -12,7 +12,7 @@ export class CredentialService {
   constructor(private readonly credentials: CredentialRepository) {}
 
   findOneOrFail(userId: number) {
-    return this.credentials.findOneOrFail({ userId })
+    return this.credentials.findOneByOrFail({ userId })
   }
 
   createPassword(attributes: Fillable) {

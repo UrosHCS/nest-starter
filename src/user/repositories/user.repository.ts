@@ -1,9 +1,14 @@
+import { Injectable } from '@nestjs/common'
 import { BaseRepository } from 'src/shared/database/base.repository'
-import { EntityRepository, Not } from 'typeorm'
+import { DataSource, Not } from 'typeorm'
 import { Role, User } from '../entities/user.entity'
 
-@EntityRepository(User)
+@Injectable()
 export class UserRepository extends BaseRepository<User> {
+  constructor(dataSource: DataSource) {
+    super(User, dataSource)
+  }
+
   latestUsers(limit: number = 10): Promise<User[]> {
     return this.find({
       where: { role: Not(Role.admin) },

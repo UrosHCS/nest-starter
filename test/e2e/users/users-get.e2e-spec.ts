@@ -10,7 +10,7 @@ describe('users get', () => {
   // for afterAll. This could be less safe then beforeEach, I'm not sure.
   beforeAll(async () => {
     await before()
-    user = await new UserFactory().create()
+    user = await new UserFactory(ctx.getDataSource()).create()
   })
 
   it('returns the user if it exists', async () => {

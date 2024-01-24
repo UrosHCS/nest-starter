@@ -1,6 +1,11 @@
+import { Injectable } from '@nestjs/common'
 import { BaseRepository } from 'src/shared/database/base.repository'
-import { EntityRepository } from 'typeorm'
+import { DataSource } from 'typeorm'
 import { Profile } from '../entities/profile.entity'
 
-@EntityRepository(Profile)
-export class ProfileRepository extends BaseRepository<Profile> {}
+@Injectable()
+export class ProfileRepository extends BaseRepository<Profile> {
+  constructor(dataSource: DataSource) {
+    super(Profile, dataSource)
+  }
+}

@@ -7,11 +7,10 @@ import { TokenService } from 'src/auth/services/token.service'
 import { User } from 'src/user/entities/user.entity'
 import { UserFactory } from 'src/user/factories/user.factory'
 import { Request } from 'test/helpers/request'
-import { Connection, ObjectType, Repository } from 'typeorm'
+import { DataSource, ObjectLiteral, ObjectType, Repository } from 'typeorm'
+import { Factories } from './factories'
 
-export interface OverrideClasses {
-  (builder: TestingModuleBuilder): void
-}
+export type OverrideClasses = (builder: TestingModuleBuilder) => void
 
 export class E2EContext {
   public app: INestApplication
@@ -21,6 +20,17 @@ export class E2EContext {
    */
   public request: Request
 
+  /**
+   * Factories instance used to create specific factories.
+   *
+   * Example:
+   *
+   * ```ts
+   * const user = await ctx.factories.user().create()
+   * ```
+   */
+  public factories: Factories
+
   moduleRef: TestingModule
 
   constructor() {
@@ -29,6 +39,7 @@ export class E2EContext {
 
   async before(overrideClasses?: OverrideClasses) {
     this.app = await this.createApp(overrideClasses)
+    this.factories = new Factories(this.getDataSource())
     this.requestSetUp()
   }
 
@@ -62,12 +73,12 @@ export class E2EContext {
   /**
    * Typeorm connection to the database. The most low level db object.
    */
-  getConnection(): Connection {
-    return this.app.get(Connection)
+  getDataSource(): DataSource {
+    return this.app.get(DataSource)
   }
 
-  repo<E>(entity: ObjectType<E>): Repository<E> {
-    return this.getConnection().manager.getRepository<E>(entity)
+  repo<E extends ObjectLiteral>(entity: ObjectType<E>): Repository<E> {
+    return this.getDataSource().manager.getRepository<E>(entity)
   }
 
   async logIn(user?: User) {
@@ -81,9 +92,9 @@ export class E2EContext {
   }
 
   async createUser(): Promise<User> {
-    const user = await new UserFactory().create()
+    const user = await new UserFactory(this.getDataSource()).create()
 
-    await new CredentialFactory().create({ user })
+    await new CredentialFactory(this.getDataSource()).create({ user })
 
     return user
   }

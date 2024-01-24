@@ -33,7 +33,7 @@ app
 
     registerGlobal('vars', vars, 'list of registered variables')
 
-    console.log('\nWelcome to ard! Here are all the registered variables:')
+    console.log('\nWelcome to repl! Here are all the registered variables:')
     console.log(vars)
 
     replServer.displayPrompt()

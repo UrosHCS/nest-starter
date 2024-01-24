@@ -1,12 +1,5 @@
 # NestJS starter app
 
-## Update 2022-09-01
-I am abandoning this project and NestJS in general. There are too many decorators, too much boilerplate code, slow startup, unnecessary OOP design patterns, too much magic.
-
-Angular is dreaded for a reason. The same reason(s) applies here. I'm gonna try fastify with knex, or the knex alternative: https://github.com/koskimas/kysely. The only thing that I'm missing in knex are model relations.
-
-Don't use Nest. I'm seriously.
-
 ## Introduction
 
 This is a boilerplate NestJS app based on the opinions from the Nest documentation, plus some additional ones. The purpose of this repository is similar to the very useful [nestjs-realworld-example-app](https://github.com/lujakob/nestjs-realworld-example-app).
@@ -16,7 +9,7 @@ This repository was inspired by the amazing [Laravel](https://laravel.com/) fram
 - Database migrations (TypeORM sync feature),
 - Entity (model) factories, used mainly for testing purposes,
 - Custom seeding feature,
-- REPL that has the application context ready for use (ard),
+- REPL that has the application context ready for use,
 - Local and google authentication,
 - Basic pagination functionality,
 - Separate database setup for dev/prod and tests,
@@ -72,19 +65,19 @@ To execute tests, run
 
 With `docker-compose up` the app starts with debug mode. So you can just run the `Attach to docker` task and debug the app. This task is defined in `.vscode/launch.json` as well as some other debugging tasks.
 
-## Ard
+## REPL
 
-The `ard` script gives you an environment to tinker with your app and it gives you top-level await. It registers the app instance, repositories, entity classes and the factory function globally so you can easily access and use it. There is a js version and a ts version.
+The `repl` script gives you an environment to tinker with your app and it gives you top-level await. It registers the app instance, repositories, entity classes and the factory function globally so you can easily access and use it. There is a js version and a ts version.
 
-The js version needs the app to be compiled first with `tsc` or `nest build`, but then you can run it without waiting for typescript compilation. Run it with `npm run ard` or:
+The js version needs the app to be compiled first with `tsc` or `nest build`, but then you can run it without waiting for typescript compilation. Run it with `npm run repl` or:
 
-`docker exec -it app npm run ard`
+`docker exec -it app npm run repl`
 
 It uses the code from `dist` folder.
 
-The ts version allows you to run ard without compiling typescript beforehand. It uses the code from `src`. There are two ways to run it. The `npm run ts-ard` script allows you to write typescript code in the REPL. The `npm run ard-from-src` script does not give you typescript in REPL but allows top-level await like regular `npm run ard`.
+The ts version allows you to run repl without compiling typescript beforehand. It uses the code from `src`. There are two ways to run it. The `npm run ts-repl` script allows you to write typescript code in the REPL. The `npm run repl-from-src` script does not give you typescript in REPL but allows top-level await like regular `npm run repl`.
 
-The `ts-ard` is not working correctly because TypeScript does not see the registered global variables. Maybe there is a way around this.
+The `ts-repl` is not working correctly because TypeScript does not see the registered global variables. Maybe there is a way around this.
 
 ## Env variables
 

@@ -35,9 +35,9 @@ describe('Register', () => {
       })
       .expect(201)
 
-    const user = await ctx.repo(User).findOneOrFail({ email })
+    const user = await ctx.repo(User).findOneByOrFail({ email })
     expect(user.id).toBeTruthy()
-    const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
+    const userPassword = await ctx.repo(Credential).findOneByOrFail({ userId: user.id })
     expect(userPassword.value).not.toEqual(password)
 
     const passwordsMatch = await compare('somePassword', userPassword.value)
@@ -71,9 +71,9 @@ describe('Register', () => {
       .expect(201)
 
     expect(res.body.data).toHaveProperty('user.email', email)
-    const user = await ctx.repo(User).findOneOrFail({ email })
+    const user = await ctx.repo(User).findOneByOrFail({ email })
     expect(user).toBeTruthy()
-    const userPassword = await ctx.repo(Credential).findOneOrFail({ userId: user.id })
+    const userPassword = await ctx.repo(Credential).findOneByOrFail({ userId: user.id })
     expect(userPassword.value).not.toEqual(password)
     expect(await compare(trimmedPassword, userPassword.value)).toStrictEqual(false)
     expect(await compare(password, userPassword.value)).toStrictEqual(true)

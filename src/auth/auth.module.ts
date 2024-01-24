@@ -7,6 +7,7 @@ import { UserModule } from 'src/user/user.module'
 import config from './config'
 import { GoogleController } from './controllers/google.controller'
 import { LocalController } from './controllers/local.controller'
+import { Credential } from './credential.entity'
 import { CredentialRepository } from './credential.repository'
 import { CredentialService } from './services/credential.service'
 import { GoogleService } from './services/google.service'
@@ -18,7 +19,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 @Module({
   imports: [
     ConfigModule.forFeature(config),
-    TypeOrmModule.forFeature([CredentialRepository]),
+    TypeOrmModule.forFeature([Credential]),
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
@@ -34,6 +35,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'
     TokenService,
     JwtStrategy,
     GoogleStrategy,
+    CredentialRepository,
   ],
   controllers: [LocalController, GoogleController],
 })
